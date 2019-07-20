@@ -46,6 +46,14 @@
             })
         })
         $(function($) {
+          // /^\d*$/.test(value) INTEGER
+          // /^\d*$/.test(value) && (value === "" || parseInt(value) <= 500) INTEGER DENGAN BATAS TERTENTU
+          // /^-?\d*$/.test(value) INTEGER POSITIV DAN NEGATIV
+          // /^-?\d*[.,]?\d*$/.test(value) FLOAT
+          // /^-?\d*[.,]?\d{0,2}$/.test(value) CURRENCY
+          // /^[a-z]*$/i.test(value) ONLY STRING A-Z
+          // /^[a-z\u00c0-\u024f]*$/i.test(value) LATIN 
+          // /^[0-9a-f]*$/i.test(value) HEXA DESIMAL
           $.fn.inputFilter = function(inputFilter) {
             return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function() {
               if (inputFilter(this.value)) {
