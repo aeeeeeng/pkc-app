@@ -54,6 +54,17 @@ class Laporan_harian extends PKCC_Controller {
         ->set_status_header($this->status)->set_output(json_encode($this->result));
     }
 
+    public function download()
+    {
+        $this->is_GET();
+        
+        $path = $this->input->get('path');
+        $real_path = base64_decode($path);
+        // echo $real_path;
+        $this->load->helper('download');
+        force_download($real_path, NULL);
+    }
+
     public function store()
     {
         $this->is_POST();
