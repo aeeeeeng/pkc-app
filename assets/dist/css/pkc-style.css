@@ -1,0 +1,80 @@
+.content-wrapper {
+    background-image: url('../../img/background/bg-1.jpeg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.skin-black .main-header {
+    box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.32);
+}
+
+.content-header {
+    padding: 20px 15px 0 15px;
+}
+
+.box {
+    box-shadow: 0px 6px 7px 0px rgba(0, 0, 0, 0.44);
+    border-radius: 0px !important;
+}
+
+.box-header {
+    background: #222;
+    color: #fff;
+}
+
+.box {
+    border-top: none !important;
+}
+
+.content-header>.breadcrumb {
+    font-size: 15px;
+}
+
+.breadcrumb>li+li:before {
+    color: #777 !important;
+}
+
+.login-page, .register-page {
+    background-image: url('../../img/background/bg-1.jpeg');   
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.login-box, .register-box {
+    box-shadow: 0px 6px 6px 3px rgba(0, 0, 0, 0.44);
+}
+
+.full-loading {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    z-index: 9999;
+    /* display: none; */
+}
+
+.navbar-nav>.user-menu>.dropdown-menu>li.user-header>p {
+    text-transform: uppercase;
+}
+
+.navbar-nav>.user-menu>.dropdown-menu>li.user-header {
+    height: 100% !important;
+}
+
+table.table-pkc thead {
+    background: #f4f4f4;
+    /* color: #fff; */
+}
+
+table.table-pkc thead th, table.table-pkc tbody td {
+    /* text-align: center; */
+}
+
+table.table-pkc tr.filter th input.form-control, table.table-pkc tr.filter th select.form-control {
+    height: 25px;
+    width: 100%;
+}
+
+.datepicker-dropdown {
+    z-index: 9999 !important;
+}
