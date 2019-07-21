@@ -52,6 +52,8 @@
                         localStorage.removeItem('JWT');
                         window.location.href = "<?= base_url('login') ?>"
                     }
+                    localStorage.removeItem('JWT');
+                    window.location.href = "<?= base_url('login') ?>"
                 }).always(() => {
                     $(".full-loading").fadeOut()
                 })
