@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Laporan_harian extends PKCC_Controller {
+class Balansitas extends PKCC_Controller {
 
     protected $status = 0;
     protected $result = [];
@@ -11,11 +11,11 @@ class Laporan_harian extends PKCC_Controller {
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('laporan_harian/laporan_harian_m');
+        $this->load->model('balansitas/balansitas_m');
         $this->load->model('files/files_m');
         $this->load->library('transaction');
         $this->load->library('files');
-        $this->load->library('auth');           
+        $this->load->library('auth'); 
     }
 
     public function index()
@@ -24,16 +24,16 @@ class Laporan_harian extends PKCC_Controller {
         $this->auth->user();
         $this->load->library('datatable');
         try {
-            $lap_har = $this->datatable
-            ->resource($this->laporan_harian_m)
+            $balansitas = $this->datatable
+            ->resource($this->balansitas_m)
             ->view('file')
             ->filter(function($model){
                 $year = ($this->input->get('year') == '') ? date("Y") : $this->input->get('year');
-                $model->where('laporan_harian.lh_year', $year);
+                $model->where('balansitas.balansitas_year', $year);
                 $month = ($this->input->get('month') == '') ? date("m") : $this->input->get('month');
-                $model->where('laporan_harian.lh_month', intval($month));
+                $model->where('balansitas.balansitas_month', intval($month));
                 if($day = $this->input->get('day')) {
-                    $model->where('laporan_harian.lh_day', intval($day));   
+                    $model->where('balansitas.balansitas_day', intval($day));   
                 }
             })
             ->custom_sort(function($model){
@@ -43,10 +43,10 @@ class Laporan_harian extends PKCC_Controller {
             })
             ->generate(TRUE);
             $this->status = 200;
-            $lap_har['success'] = TRUE;
-            $lap_har['message'] = 'Data fetched';
-            $this->result = $lap_har;
-        } catch (Exception $e) {
+            $balansitas['success'] = TRUE;
+            $balansitas['message'] = 'Data fetched';
+            $this->result = $balansitas;
+        } catch(Exception $e) {
             $this->status = 500;
             $this->result = ['success' => FALSE, 'message' => $e->getMessage()];
         }
@@ -71,35 +71,35 @@ class Laporan_harian extends PKCC_Controller {
         $this->auth->user();
         $this->load->library('form_validation');
         $validation = [
-            ['field' => 'lh_year', 'label' => 'Tahun Laporan Harian', 'rules' => 'required|numeric'],
-            ['field' => 'lh_month', 'label' => 'Bulan Laporan Harian', 'rules' => 'required|numeric'],
-            ['field' => 'lh_day', 'label' => 'Hari Laporan Harian', 'rules' => 'required|numeric'],
+            ['field' => 'balansitas_year', 'label' => 'Tahun Balansitas', 'rules' => 'required|numeric'],
+            ['field' => 'balansitas_month', 'label' => 'Bulan Balansitas', 'rules' => 'required|numeric'],
+            ['field' => 'balansitas_day', 'label' => 'Hari Balansitas', 'rules' => 'required|numeric'],
         ];
         $this->form_validation->set_rules($validation);
-        if($this->form_validation->run()) {
-            if (isset($_FILES['file']) && is_uploaded_file($_FILES['file']['tmp_name'])) {
-                $lh_year = $this->input->post('lh_year');
-                $lh_month = $this->input->post('lh_month');
-                $lh_day = $this->input->post('lh_day');
-                $upload = $this->files->upload_file(date("Y/m/d/H/i/s").'-laporan_harian-'.$lh_day.'-'.$lh_month.'-'.$lh_year, './upload/documents/laporan_harian');   
-                if ($upload['success']) {
+        if($this->form_validation->run()) { 
+            if (isset($_FILES['file']) && is_uploaded_file($_FILES['file']['tmp_name'])) { 
+                $balansitas_year = $this->input->post('balansitas_year');
+                $balansitas_month = $this->input->post('balansitas_month');
+                $balansitas_day = $this->input->post('balansitas_day');
+                $upload = $this->files->upload_file(date("Y/m/d/H/i/s").'-balansitas-'.$balansitas_day.'-'.$balansitas_month.'-'.$balansitas_year, './upload/documents/balansitas');   
+                if($upload['success']) {
                     $message = $upload['message'];
                     $file = [
                         'file_name' => $message['file_name'],
                         'file_path' => $message['full_path'],
-                        'file_download_path' => base_url('api/laporan_harian/download?path='.base64_encode('./upload/documents/laporan_harian/'.$message['file_name'])),
+                        'file_download_path' => base_url('api/balansitas/download?path='.base64_encode('./upload/documents/balansitas/'.$message['file_name'])),
                         'file_ext' => $message['file_ext']
                     ];
                     $this->transaction->start();
                     $this->files_m->insert($file);
                     $file_id = $this->files_m->insert_id();
-                    $laporan_harian = [
+                    $balansitas = [
                         'file_id' => $file_id,
-                        'lh_year' => $this->input->post('lh_year'),
-                        'lh_year' => $this->input->post('lh_year'),
-                        'lh_month' => $this->input->post('lh_month')
+                        'balansitas_year' => $this->input->post('balansitas_year'),
+                        'balansitas_month' => $this->input->post('balansitas_month'),
+                        'balansitas_day' => $this->input->post('balansitas_day')
                     ];
-                    $this->laporan_harian_m->insert($laporan_harian);
+                    $this->balansitas_m->insert($balansitas);
                     if($this->transaction->complete()){
                         $this->status = 200;
                         $this->result = array(
@@ -134,13 +134,13 @@ class Laporan_harian extends PKCC_Controller {
     public function show($id)
     {
         $this->is_GET();
-        $this->auth->user();        
+        $this->auth->user();
         try {
-            $laporan_harian = $this->laporan_harian_m->view('file')->find($id);
+            $balansitas = $this->balansitas_m->view('file')->find($id);
             $this->status = 200;
-            $this->result = ['success' => TRUE, 'message' => 'data fetched', 'data' => $laporan_harian];
-        } catch(Exception $e) {
-            $this->status = 500;
+            $this->result = ['success' => TRUE, 'message' => 'data fetched', 'data' => $balansitas];
+        } catch (Exception $e) {
+            $this->status = 200;
             $this->result = ['success' => FALSE, 'message' => $e->getMessage()];
         }
         $this->output->set_content_type('application/json')
@@ -153,35 +153,38 @@ class Laporan_harian extends PKCC_Controller {
         $this->auth->user();
         $this->load->library('form_validation');
         $validations = [
-            ['field' => 'lh_day', 'label' => 'Hari Laporan Harian', 'rules' => 'required|numeric'],
-            ['field' => 'lh_month', 'label' => 'Bulan Laporan Harian', 'rules' => 'required|numeric'],
-            ['field' => 'lh_year', 'label' => 'Tahun Laporan Harian', 'rules' => 'required|numeric']
+            ['field' => 'balansitas_year', 'label' => 'Tahun Balansitas', 'rules' => 'required|numeric'],
+            ['field' => 'balansitas_month', 'label' => 'Bulan Balansitas', 'rules' => 'required|numeric'],
+            ['field' => 'balansitas_day', 'label' => 'Hari Balansitas', 'rules' => 'required|numeric'],
         ];
         $this->form_validation->set_rules($validations);
         if($this->form_validation->run()){
             $this->transaction->start();
-            $lh_day = $this->input->post('lh_day');
-            $lh_month = $this->input->post('lh_month');
-            $lh_year = $this->input->post('lh_year');
+            $balansitas_year = $this->input->post('balansitas_year');
+            $balansitas_month = $this->input->post('balansitas_month');
+            $balansitas_day = $this->input->post('balansitas_day');
             $message = [];
             if (isset($_FILES['file']) && is_uploaded_file($_FILES['file']['tmp_name'])) {
-                $old_laphar = $this->laporan_harian_m->find($id);
-                $old_file = $this->files_m->find($old_laphar->file_id);
+                $old_balansitas = $this->balansitas_m->find($id);
+                $old_file = $this->files_m->find($old_balansitas->file_id);
                 $this->load->helper("file");
                 unlink($old_file->file_path);
-                $upload = $this->files->upload_file(date("Y/m/d/H/i/s").'-laporan_harian-'.$lh_day.'-'.$lh_month.'-'.$lh_year, './upload/documents/laporan_harian');
+                $upload = $this->files->upload_file(date("Y/m/d/H/i/s").'-balansitas-'.$balansitas_day.'-'.$balansitas_month.'-'.$balansitas_year, './upload/documents/balansitas');
                 $message = $upload['message'];
-                
                 $new_file = [
                     'file_name' => $message['file_name'],
                     'file_path' => $message['full_path'],
-                    'file_download_path' => base_url('api/laporan_harian/download?path='.base64_encode('./upload/documents/laporan_harian/'.$message['file_name'])),
+                    'file_download_path' => base_url('api/balansitas/download?path='.base64_encode('./upload/documents/balansitas/'.$message['file_name'])),
                     'file_ext' => $message['file_ext']
                 ];
                 $this->files_m->update($old_file->id, $new_file);
             }
-            $new_laphar = ['lh_day' => $lh_day, 'lh_year' => $lh_year, 'lh_month' => $lh_month];
-            $this->laporan_harian_m->update($id, $new_laphar);
+            $new_balansitas = [
+                'balansitas_year' => $balansitas_year,
+                'balansitas_month' => $balansitas_month,
+                'balansitas_day' => $balansitas_day
+            ];
+            $this->balansitas_m->update($id, $new_balansitas);
             if($this->transaction->complete()) {
                 $this->status = 200;
                 $this->result = ['success' => TRUE, 'message' => $message];
@@ -204,12 +207,12 @@ class Laporan_harian extends PKCC_Controller {
         $this->is_DELETE();
         $this->auth->user();
         try {
-            $this->laporan_harian_m->delete($id);
+            $this->balansitas_m->delete($id);
             $this->status = 200;
             $this->result = ['success' => TRUE, 'message' => 'berhasil di hapus'];
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $this->status = 500;
-            $this->result = ['success' => FALSE, 'message' => $e->getMessage()];
+            $this->result = ['success' => FALSE, 'message' => $e->getMessage()];   
         }
         $this->output->set_content_type('application/json')
         ->set_status_header($this->status)->set_output(json_encode($this->result));

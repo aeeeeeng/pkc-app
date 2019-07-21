@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Laporan_harian extends PKCC_Controller {
+class Permentan extends PKCC_Controller {
 
     protected $status = 0;
     protected $result = [];
@@ -11,7 +11,7 @@ class Laporan_harian extends PKCC_Controller {
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('laporan_harian/laporan_harian_m');
+        $this->load->model('permentan/permentan_m');
         $this->load->model('files/files_m');
         $this->load->library('transaction');
         $this->load->library('files');
@@ -24,29 +24,24 @@ class Laporan_harian extends PKCC_Controller {
         $this->auth->user();
         $this->load->library('datatable');
         try {
-            $lap_har = $this->datatable
-            ->resource($this->laporan_harian_m)
+            $permentan = $this->datatable
+            ->resource($this->permentan_m)
             ->view('file')
             ->filter(function($model){
-                $year = ($this->input->get('year') == '') ? date("Y") : $this->input->get('year');
-                $model->where('laporan_harian.lh_year', $year);
-                $month = ($this->input->get('month') == '') ? date("m") : $this->input->get('month');
-                $model->where('laporan_harian.lh_month', intval($month));
-                if($day = $this->input->get('day')) {
-                    $model->where('laporan_harian.lh_day', intval($day));   
+                if($year = $this->input->get('year')) {
+                    $model->where('permentan.permentan_year', intval($year));   
                 }
             })
             ->custom_sort(function($model){
                 if($sort_by = $this->input->get('sort_by') && $sort_type = $this->input->get('sort_type')) {
                     $model->order_by($sort_by, $sort_type);
                 }
-            })
-            ->generate(TRUE);
+            })->generate(TRUE);
             $this->status = 200;
-            $lap_har['success'] = TRUE;
-            $lap_har['message'] = 'Data fetched';
-            $this->result = $lap_har;
-        } catch (Exception $e) {
+            $permentan['success'] = TRUE;
+            $permentan['message'] = 'Data fetched';
+            $this->result = $permentan;
+        } catch(Exception $e) {
             $this->status = 500;
             $this->result = ['success' => FALSE, 'message' => $e->getMessage()];
         }
@@ -71,35 +66,44 @@ class Laporan_harian extends PKCC_Controller {
         $this->auth->user();
         $this->load->library('form_validation');
         $validation = [
-            ['field' => 'lh_year', 'label' => 'Tahun Laporan Harian', 'rules' => 'required|numeric'],
-            ['field' => 'lh_month', 'label' => 'Bulan Laporan Harian', 'rules' => 'required|numeric'],
-            ['field' => 'lh_day', 'label' => 'Hari Laporan Harian', 'rules' => 'required|numeric'],
+            ['field' => 'permentan_number', 'label' => 'Nomor Permentan', 'rules' => 'required'],
+            ['field' => 'permentan_year', 'label' => 'Tahun Permentan', 'rules' => 'required|numeric'],
+            ['field' => 'permentan_description', 'label' => 'Perihal Permentan', 'rules' => 'required'],
+            ['field' => 'permentan_total_urea', 'label' => 'Total Urea', 'rules' => 'required|numeric'],
+            ['field' => 'permentan_total_npk', 'label' => 'Total NPK', 'rules' => 'required|numeric'],
+            ['field' => 'permentan_total_organik', 'label' => 'Total Organik', 'rules' => 'required|numeric']
         ];
         $this->form_validation->set_rules($validation);
         if($this->form_validation->run()) {
             if (isset($_FILES['file']) && is_uploaded_file($_FILES['file']['tmp_name'])) {
-                $lh_year = $this->input->post('lh_year');
-                $lh_month = $this->input->post('lh_month');
-                $lh_day = $this->input->post('lh_day');
-                $upload = $this->files->upload_file(date("Y/m/d/H/i/s").'-laporan_harian-'.$lh_day.'-'.$lh_month.'-'.$lh_year, './upload/documents/laporan_harian');   
+                $permentan_number = $this->input->post('permentan_number');
+                $permentan_year = $this->input->post('permentan_year');
+                $permentan_description = $this->input->post('permentan_description');
+                $permentan_total_urea = $this->input->post('permentan_total_urea');
+                $permentan_total_npk = $this->input->post('permentan_total_npk');
+                $permentan_total_organik = $this->input->post('permentan_total_organik');
+                $upload = $this->files->upload_file(date("Y/m/d/H/i/s").'-permentan-'.$permentan_number.'-'.$permentan_year, './upload/documents/permentan');   
                 if ($upload['success']) {
                     $message = $upload['message'];
                     $file = [
                         'file_name' => $message['file_name'],
                         'file_path' => $message['full_path'],
-                        'file_download_path' => base_url('api/laporan_harian/download?path='.base64_encode('./upload/documents/laporan_harian/'.$message['file_name'])),
+                        'file_download_path' => base_url('api/permentan/download?path='.base64_encode('./upload/documents/permentan/'.$message['file_name'])),
                         'file_ext' => $message['file_ext']
                     ];
                     $this->transaction->start();
                     $this->files_m->insert($file);
                     $file_id = $this->files_m->insert_id();
-                    $laporan_harian = [
+                    $permentan = [
                         'file_id' => $file_id,
-                        'lh_year' => $this->input->post('lh_year'),
-                        'lh_year' => $this->input->post('lh_year'),
-                        'lh_month' => $this->input->post('lh_month')
+                        'permentan_number' => $permentan_number,
+                        'permentan_year' => $permentan_year,
+                        'permentan_description' => $permentan_description,
+                        'permentan_total_urea' => $permentan_total_urea,
+                        'permentan_total_npk' => $permentan_total_npk,
+                        'permentan_total_organik' => $permentan_total_organik,
                     ];
-                    $this->laporan_harian_m->insert($laporan_harian);
+                    $this->permentan_m->insert($permentan);
                     if($this->transaction->complete()){
                         $this->status = 200;
                         $this->result = array(
@@ -134,17 +138,17 @@ class Laporan_harian extends PKCC_Controller {
     public function show($id)
     {
         $this->is_GET();
-        $this->auth->user();        
+        $this->auth->user();
         try {
-            $laporan_harian = $this->laporan_harian_m->view('file')->find($id);
+            $permentan = $this->permentan_m->view('file')->find($id);
             $this->status = 200;
-            $this->result = ['success' => TRUE, 'message' => 'data fetched', 'data' => $laporan_harian];
+            $this->result = ['success' => TRUE, 'message' => 'data fetched', 'data' => $permentan];
         } catch(Exception $e) {
             $this->status = 500;
             $this->result = ['success' => FALSE, 'message' => $e->getMessage()];
         }
         $this->output->set_content_type('application/json')
-        ->set_status_header($this->status)->set_output(json_encode($this->result));
+        ->set_status_header($this->status)->set_output(json_encode($this->result));   
     }
 
     public function update($id)
@@ -153,35 +157,47 @@ class Laporan_harian extends PKCC_Controller {
         $this->auth->user();
         $this->load->library('form_validation');
         $validations = [
-            ['field' => 'lh_day', 'label' => 'Hari Laporan Harian', 'rules' => 'required|numeric'],
-            ['field' => 'lh_month', 'label' => 'Bulan Laporan Harian', 'rules' => 'required|numeric'],
-            ['field' => 'lh_year', 'label' => 'Tahun Laporan Harian', 'rules' => 'required|numeric']
+            ['field' => 'permentan_number', 'label' => 'Nomor Permentan', 'rules' => 'required'],
+            ['field' => 'permentan_year', 'label' => 'Tahun Permentan', 'rules' => 'required|numeric'],
+            ['field' => 'permentan_description', 'label' => 'Perihal Permentan', 'rules' => 'required'],
+            ['field' => 'permentan_total_urea', 'label' => 'Total Urea', 'rules' => 'required|numeric'],
+            ['field' => 'permentan_total_npk', 'label' => 'Total NPK', 'rules' => 'required|numeric'],
+            ['field' => 'permentan_total_organik', 'label' => 'Total Organik', 'rules' => 'required|numeric']
         ];
         $this->form_validation->set_rules($validations);
         if($this->form_validation->run()){
             $this->transaction->start();
-            $lh_day = $this->input->post('lh_day');
-            $lh_month = $this->input->post('lh_month');
-            $lh_year = $this->input->post('lh_year');
+            $permentan_number = $this->input->post('permentan_number');
+            $permentan_year = $this->input->post('permentan_year');
+            $permentan_description = $this->input->post('permentan_description');
+            $permentan_total_urea = $this->input->post('permentan_total_urea');
+            $permentan_total_npk = $this->input->post('permentan_total_npk');
+            $permentan_total_organik = $this->input->post('permentan_total_organik');
             $message = [];
             if (isset($_FILES['file']) && is_uploaded_file($_FILES['file']['tmp_name'])) {
-                $old_laphar = $this->laporan_harian_m->find($id);
-                $old_file = $this->files_m->find($old_laphar->file_id);
+                $old_permentan = $this->permentan_m->find($id);
+                $old_file = $this->files_m->find($old_permentan->file_id);
                 $this->load->helper("file");
                 unlink($old_file->file_path);
-                $upload = $this->files->upload_file(date("Y/m/d/H/i/s").'-laporan_harian-'.$lh_day.'-'.$lh_month.'-'.$lh_year, './upload/documents/laporan_harian');
+                $upload = $this->files->upload_file(date("Y/m/d/H/i/s").'-permentan-'.$permentan_number.'-'.$permentan_year, './upload/documents/permentan');
                 $message = $upload['message'];
-                
                 $new_file = [
                     'file_name' => $message['file_name'],
                     'file_path' => $message['full_path'],
-                    'file_download_path' => base_url('api/laporan_harian/download?path='.base64_encode('./upload/documents/laporan_harian/'.$message['file_name'])),
+                    'file_download_path' => base_url('api/permentan/download?path='.base64_encode('./upload/documents/permentan/'.$message['file_name'])),
                     'file_ext' => $message['file_ext']
                 ];
                 $this->files_m->update($old_file->id, $new_file);
             }
-            $new_laphar = ['lh_day' => $lh_day, 'lh_year' => $lh_year, 'lh_month' => $lh_month];
-            $this->laporan_harian_m->update($id, $new_laphar);
+             $new_permentan = [
+                'permentan_number' => $permentan_number,
+                'permentan_year' => $permentan_year,
+                'permentan_description' => $permentan_description,
+                'permentan_total_urea' => $permentan_total_urea,
+                'permentan_total_npk' => $permentan_total_npk,
+                'permentan_total_organik' => $permentan_total_organik,
+            ];
+            $this->permentan_m->update($id, $new_permentan);
             if($this->transaction->complete()) {
                 $this->status = 200;
                 $this->result = ['success' => TRUE, 'message' => $message];
@@ -204,7 +220,7 @@ class Laporan_harian extends PKCC_Controller {
         $this->is_DELETE();
         $this->auth->user();
         try {
-            $this->laporan_harian_m->delete($id);
+            $this->permentan_m->delete($id);
             $this->status = 200;
             $this->result = ['success' => TRUE, 'message' => 'berhasil di hapus'];
         } catch(Exception $e) {
@@ -212,7 +228,7 @@ class Laporan_harian extends PKCC_Controller {
             $this->result = ['success' => FALSE, 'message' => $e->getMessage()];
         }
         $this->output->set_content_type('application/json')
-        ->set_status_header($this->status)->set_output(json_encode($this->result));
+        ->set_status_header($this->status)->set_output(json_encode($this->result));   
     }
 
 }
