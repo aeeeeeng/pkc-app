@@ -11,7 +11,7 @@
  Target Server Version : 50723
  File Encoding         : 65001
 
- Date: 21/07/2019 22:58:17
+ Date: 22/07/2019 23:15:44
 */
 
 SET NAMES utf8mb4;
@@ -78,7 +78,7 @@ CREATE TABLE `files` (
   `file_ext` varchar(255) DEFAULT NULL,
   `file_download_path` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of files
@@ -110,6 +110,38 @@ INSERT INTO `files` VALUES (58, '20190721091107-permentan-PERMENTAN20190001-2019
 INSERT INTO `files` VALUES (59, '20190721094721-permentan-PERMENTAN20190001-2019.png', '/Applications/MAMP/htdocs/pkc_app/upload/documents/permentan/20190721094721-permentan-PERMENTAN20190001-2019.png', '.png', 'http://localhost:8888/pkc_app/api/permentan/download?path=Li91cGxvYWQvZG9jdW1lbnRzL3Blcm1lbnRhbi8yMDE5MDcyMTA5NDcyMS1wZXJtZW50YW4tUEVSTUVOVEFOMjAxOTAwMDEtMjAxOS5wbmc=');
 INSERT INTO `files` VALUES (60, '20190721121608-permendag-PERMENDAG20180001-2018.png', '/Applications/MAMP/htdocs/pkc_app/upload/documents/permendag/20190721121608-permendag-PERMENDAG20180001-2018.png', '.png', 'http://localhost:8888/pkc_app/api/permendag/download?path=Li91cGxvYWQvZG9jdW1lbnRzL3Blcm1lbmRhZy8yMDE5MDcyMTEyMTYwOC1wZXJtZW5kYWctUEVSTUVOREFHMjAxODAwMDEtMjAxOC5wbmc=');
 INSERT INTO `files` VALUES (61, '20190721155029-SK-PROVINSI-SKP20170002-2017.png', '/Applications/MAMP/htdocs/pkc_app/upload/documents/sk_provinsi/20190721155029-SK-PROVINSI-SKP20170002-2017.png', '.png', 'http://localhost:8888/pkc_app/api/sk_provinsi/download?path=Li91cGxvYWQvZG9jdW1lbnRzL3NrX3Byb3ZpbnNpLzIwMTkwNzIxMTU1MDI5LVNLLVBST1ZJTlNJLVNLUDIwMTcwMDAyLTIwMTcucG5n');
+INSERT INTO `files` VALUES (62, '20190722134431-peraturan-pupuk-indonesia-SRTPI20180002-2018.png', '/Applications/MAMP/htdocs/pkc_app/upload/documents/srt_pi/20190722134431-peraturan-pupuk-indonesia-SRTPI20180002-2018.png', '.png', 'http://localhost:8888/pkc_app/api/srt_pi/download?path=Li91cGxvYWQvZG9jdW1lbnRzL3NydF9waS8yMDE5MDcyMjEzNDQzMS1wZXJhdHVyYW4tcHVwdWstaW5kb25lc2lhLVNSVFBJMjAxODAwMDItMjAxOC5wbmc=');
+INSERT INTO `files` VALUES (63, '20190722141119-peraturan-pupuk-indonesia-SRTPI20180002-2018.xls', '/Applications/MAMP/htdocs/pkc_app/upload/documents/srt_pi/20190722141119-peraturan-pupuk-indonesia-SRTPI20180002-2018.xls', '.xls', 'http://localhost:8888/pkc_app/api/srt_pi/download?path=Li91cGxvYWQvZG9jdW1lbnRzL3NydF9waS8yMDE5MDcyMjE0MTExOS1wZXJhdHVyYW4tcHVwdWstaW5kb25lc2lhLVNSVFBJMjAxODAwMDItMjAxOC54bHM=');
+INSERT INTO `files` VALUES (64, '20190722142414-peraturan-pupuk-indonesia-SRTPI20170001-2017.png', '/Applications/MAMP/htdocs/pkc_app/upload/documents/srt_pi/20190722142414-peraturan-pupuk-indonesia-SRTPI20170001-2017.png', '.png', 'http://localhost:8888/pkc_app/api/srt_pi/download?path=Li91cGxvYWQvZG9jdW1lbnRzL3NydF9waS8yMDE5MDcyMjE0MjQxNC1wZXJhdHVyYW4tcHVwdWstaW5kb25lc2lhLVNSVFBJMjAxNzAwMDEtMjAxNy5wbmc=');
+INSERT INTO `files` VALUES (66, '20190722161304-harga_tebus_subsidi-HS20200001-2020.xls', '/Applications/MAMP/htdocs/pkc_app/upload/documents/harga_subsidi/20190722161304-harga_tebus_subsidi-HS20200001-2020.xls', '.xls', 'http://localhost:8888/pkc_app/api/harga_subsidi/download?path=Li91cGxvYWQvZG9jdW1lbnRzL2hhcmdhX3N1YnNpZGkvMjAxOTA3MjIxNjEzMDQtaGFyZ2FfdGVidXNfc3Vic2lkaS1IUzIwMjAwMDAxLTIwMjAueGxz');
+COMMIT;
+
+-- ----------------------------
+-- Table structure for harga_subsidi
+-- ----------------------------
+DROP TABLE IF EXISTS `harga_subsidi`;
+CREATE TABLE `harga_subsidi` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `file_id` int(11) DEFAULT NULL,
+  `hs_year` varchar(5) DEFAULT NULL,
+  `hs_number` varchar(255) DEFAULT NULL,
+  `hs_description` varchar(255) DEFAULT NULL,
+  `hs_urea` int(11) DEFAULT NULL,
+  `hs_npk` int(11) DEFAULT NULL,
+  `hs_organik` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `created_by` varchar(255) DEFAULT NULL,
+  `updated_by` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of harga_subsidi
+-- ----------------------------
+BEGIN;
+INSERT INTO `harga_subsidi` VALUES (1, 64, '2019', 'HS/2019/0001', 'FIRST', 1000000, 3500000, 2000000, '2019-07-22 22:26:51', NULL, 'aeeeeeng', NULL);
+INSERT INTO `harga_subsidi` VALUES (3, 66, '2020', 'HS/2020/0001', 'TES EDIT', 7, 7, 7, '2019-07-22 15:59:20', '2019-07-22 16:13:04', 'aeeeeeng', 'aeeeeeng');
 COMMIT;
 
 -- ----------------------------
@@ -255,6 +287,33 @@ INSERT INTO `sk_provinsi` VALUES (3, 61, 'SKP/2017/0002', '2017', 'NUSA TENGGARA
 COMMIT;
 
 -- ----------------------------
+-- Table structure for srt_pi
+-- ----------------------------
+DROP TABLE IF EXISTS `srt_pi`;
+CREATE TABLE `srt_pi` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `file_id` int(11) DEFAULT NULL,
+  `sp_number` varchar(255) DEFAULT NULL,
+  `sp_year` varchar(5) DEFAULT NULL,
+  `sp_description` varchar(255) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `created_by` varchar(255) DEFAULT NULL,
+  `updated_by` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of srt_pi
+-- ----------------------------
+BEGIN;
+INSERT INTO `srt_pi` VALUES (1, 60, 'SRTPI/2019/0001', '2019', 'FIRST', '2019-07-22 10:14:42', NULL, 'aeeeeeng', NULL);
+INSERT INTO `srt_pi` VALUES (2, 62, 'SRTPI/2018/0002', '2018', 'TES INSERT', '2019-07-22 13:44:31', NULL, 'aeeeeeng', NULL);
+INSERT INTO `srt_pi` VALUES (3, 63, 'SRTPI/2018/0002', '2018', 'TES INSERT', '2019-07-22 14:11:19', NULL, 'aeeeeeng', NULL);
+INSERT INTO `srt_pi` VALUES (4, 64, 'SRTPI/2017/0001', '2017', 'TES UPDATE', '2019-07-22 14:16:03', '2019-07-22 14:24:14', 'aeeeeeng', 'aeeeeeng');
+COMMIT;
+
+-- ----------------------------
 -- Table structure for users
 -- ----------------------------
 DROP TABLE IF EXISTS `users`;
@@ -270,7 +329,7 @@ CREATE TABLE `users` (
   `updated_at` datetime DEFAULT NULL,
   `access` varchar(255) NOT NULL DEFAULT 'client',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of users
@@ -278,6 +337,7 @@ CREATE TABLE `users` (
 BEGIN;
 INSERT INTO `users` VALUES (29, 'aeeeeeng', '8da5927f46a9910d958ac54444fa171a', 'aeeeeeng@gmail.com', 'Syahril', 'Ardi', 'Syahril Ardi', '2019-07-19 02:30:30', NULL, 'admin');
 INSERT INTO `users` VALUES (30, 'afendi', '76cf4079ac1b10a3f8c77ca4bd161b29', 'afendi@gmail.com', 'afendi', NULL, 'afendi ', '2019-07-19 02:30:57', NULL, 'client');
+INSERT INTO `users` VALUES (31, 'aengganteng', '0b4e7a0e5fe84ad35fb5f95b9ceeac79', 'aaaa@a.a', 'aaaaaa', NULL, 'aaaaaa ', '2019-07-21 16:01:57', NULL, 'client');
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
