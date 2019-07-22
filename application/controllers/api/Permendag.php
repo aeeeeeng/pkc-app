@@ -72,6 +72,8 @@ class Permendag extends PKCC_Controller {
             ['field' => 'permendag_number', 'label' => 'Nomor Permendag', 'rules' => 'required'],
             ['field' => 'permendag_description', 'label' => 'Perihal Permendag', 'rules' => 'required']
         ];
+        if (empty($_FILES['file']['name']))
+            array_push($validations, ['field' => 'file', 'label' => 'File', 'rules' => 'required']);
         $this->form_validation->set_rules($validations);
         if($this->form_validation->run()) {
             if (isset($_FILES['file']) && is_uploaded_file($_FILES['file']['tmp_name'])) {

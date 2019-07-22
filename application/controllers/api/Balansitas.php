@@ -75,6 +75,8 @@ class Balansitas extends PKCC_Controller {
             ['field' => 'balansitas_month', 'label' => 'Bulan Balansitas', 'rules' => 'required|numeric'],
             ['field' => 'balansitas_day', 'label' => 'Hari Balansitas', 'rules' => 'required|numeric'],
         ];
+        if (empty($_FILES['file']['name']))
+            array_push($validation, ['field' => 'file', 'label' => 'File', 'rules' => 'required']);
         $this->form_validation->set_rules($validation);
         if($this->form_validation->run()) { 
             if (isset($_FILES['file']) && is_uploaded_file($_FILES['file']['tmp_name'])) { 

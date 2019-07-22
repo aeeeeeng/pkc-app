@@ -73,6 +73,8 @@ class Permentan extends PKCC_Controller {
             ['field' => 'permentan_total_npk', 'label' => 'Total NPK', 'rules' => 'required|numeric'],
             ['field' => 'permentan_total_organik', 'label' => 'Total Organik', 'rules' => 'required|numeric']
         ];
+        if (empty($_FILES['file']['name']))
+            array_push($validation, ['field' => 'file', 'label' => 'File', 'rules' => 'required']);
         $this->form_validation->set_rules($validation);
         if($this->form_validation->run()) {
             if (isset($_FILES['file']) && is_uploaded_file($_FILES['file']['tmp_name'])) {

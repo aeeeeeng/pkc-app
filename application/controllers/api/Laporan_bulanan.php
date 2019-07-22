@@ -74,6 +74,8 @@ class Laporan_bulanan extends PKCC_Controller {
             ['field' => 'lb_year', 'label' => 'Tahun Laporan Bulanan', 'rules' => 'required|numeric'],
             ['field' => 'lb_month', 'label' => 'Bulan Laporan Bulanan', 'rules' => 'required|numeric']
         ];
+        if (empty($_FILES['file']['name']))
+            array_push($validations, ['field' => 'file', 'label' => 'File', 'rules' => 'required']);
         $this->form_validation->set_rules($validations);
         if($this->form_validation->run()){
             if (isset($_FILES['file']) && is_uploaded_file($_FILES['file']['tmp_name'])) {

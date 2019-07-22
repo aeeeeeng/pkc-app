@@ -72,6 +72,8 @@ class Buku_pintar extends PKCC_Controller {
             ['field' => 'bp_month', 'label' => 'Bulan Buku Pintar', 'rules' => 'required|numeric'],
             ['field' => 'bp_year', 'label' => 'Tahun Buku Pintar', 'rules' => 'required|numeric']
         ];
+        if (empty($_FILES['file']['name']))
+            array_push($validations, ['field' => 'file', 'label' => 'File', 'rules' => 'required']);
         $this->form_validation->set_rules($validations);
         if($this->form_validation->run()) {
             $bp_year = $this->input->post('bp_year');

@@ -75,6 +75,8 @@ class Laporan_harian extends PKCC_Controller {
             ['field' => 'lh_month', 'label' => 'Bulan Laporan Harian', 'rules' => 'required|numeric'],
             ['field' => 'lh_day', 'label' => 'Hari Laporan Harian', 'rules' => 'required|numeric'],
         ];
+        if (empty($_FILES['file']['name']))
+            array_push($validation, ['field' => 'file', 'label' => 'File', 'rules' => 'required']);
         $this->form_validation->set_rules($validation);
         if($this->form_validation->run()) {
             if (isset($_FILES['file']) && is_uploaded_file($_FILES['file']['tmp_name'])) {

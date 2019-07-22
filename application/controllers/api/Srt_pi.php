@@ -74,7 +74,7 @@ class Srt_pi extends PKCC_Controller {
             ['field' => 'sp_description', 'label' => 'Perihal Surat Peraturan', 'rules' => 'required'],
         ];
         if (empty($_FILES['file']['name']))
-            array_push($validations, ['field' => 'file', 'label' => 'File Surat Peraturan', 'rules' => 'required']);
+            array_push($validations, ['field' => 'file', 'label' => 'File', 'rules' => 'required']);
         
         $this->form_validation->set_rules($validations);
         if($this->form_validation->run()) {
