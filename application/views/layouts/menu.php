@@ -7,7 +7,7 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Laporan Penjualan <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
                 <li><a href="<?= base_url('laporan_bulanan') ?>">Laporan Bulanan</a></li>
-                <li><a href="#">Laporan Harian</a></li>
+                <li><a href="<?= base_url('laporan_harian') ?>">Laporan Harian</a></li>
             </ul>
         </li>
 

@@ -21,23 +21,34 @@ Laporan Bulanan
             </div>
             <br />
             <div class="row">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Tipe filter waktu</label>
+                        <select onchange="change_date()" class="form-control" id="date_type">
+                            <option value="2" >Hanya Bulan dan Tahun</option>
+                            <option value="3" selected>Hanya Tahun</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Filter waktu</label>
+                        <input type="text" class="form-control date datepicker-all" placeholder="Semua Data" id="date_filter" value="<?= date("m/Y") ?>" onchange="parsing()" readonly>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <button class="form-control btn btn-flat bg-black" onclick="search()">Cari</button>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
                 <div class="col-md-12">
                     <div class="table-responsive">
                         <table class="table table-hover table-bordered table-pkc" id="table_laporan_bulanan">
                             <thead>
-                                <tr class="filter">
-                                    <th></th>
-                                    <th> <input type="text" placeholder="Tahun Berjalan" id="year" onchange="filter()" class="form-control datepicker-year"> </th>
-                                    <th>
-                                        <?php $this->load->view('partials/filter_bulan'); ?>
-                                    </th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
                                 <tr>
                                     <th>No</th>
                                     <th>Tahun</th>
@@ -64,77 +75,142 @@ Laporan Bulanan
 <?php $this->template->section('custom_js_2') ?>
 <?php $this->load->view('partials/javascript'); ?>
 <script>
-
+    let year, month, day;
+    let table_laporan_bulanan;
     const JWT = localStorage.getItem("JWT");
-    const table_laporan_bulanan = $("#table_laporan_bulanan").DataTable({
-        processing: true,
-        serverSide: true,
-        searching: false,
-        lengthMenu: [
-            [12, 24, 36, -1],
-            ['12 baris', '24 baris', '36 baris', 'Lihat Semua']
-        ],
-        ajax: {
-            'url': '<?= base_url('api/laporan_bulanan') ?>',
-            'type': 'GET',
-            'beforeSend': function(request) {
-                request.setRequestHeader("JWT", JWT);
-            },
-            data: function(d) {
-                d.year = $("#year").val()
-                d.month = $("#month").val()
-            },
-            error: function(error) {
-                if(error.status === 401) {
-                    refreshAuth()
-                } else if (error.status === 500) {
-                    toastr.error(respJson.message)
-                }
-                
-            }
-        },
-        columns: [{
-                data: 'laporan_bulanan.id',
-                name: 'laporan_bulanan.id',
-                render: function(data, type, row, attr) {
-                    return attr.row + attr.settings._iDisplayStart + 1;
-                },
-                searchable: false,
-                orderable: false
-            },
-            {
-                data: 'lb_year',
-                name: 'lb_year'
-            },
-            {
-                data: 'lb_month',
-                name: 'lb_month',
-                render: (d, t, f) => {
-                    return getMonthName(d);
-                }
-            },
-            { data: 'created_by', name: 'created_by'},
-            { data: 'updated_by', name: 'updated_by'},
-            { data: 'created_at', name: 'created_at'},
-            { data: 'updated_at', name: 'updated_at'},
-            {
-                data: 'laporan_bulanan.id',
-                name: 'laporan_bulanan.id',
-                render: (d, t, f) => {
-                    return '<a href="' + f.file_download_path + '" target="_blank" class="btn btn-success btn-flat btn-sm"><i class="fa fa-download"></i></href>';
-                }
-            },
-            {
-                data: 'id',
-                name: 'laporan_bulanan.id',
-                render: (d, t, f) => {
-                    const edit = `<button onclick="edit(${d})" class="btn btn-primary btn-flat btn-sm"><i class="fa fa-wrench"></i></button>`;
-                    const remove = `<button onclick="remove(${d})" class="btn btn-danger btn-flat btn-sm"><i class="fa fa-trash"></i></button>`;
-                    return edit+' '+remove;
-                }
-            }
-        ]
+    $(document).ready(function(){
+        setDefault();
     })
+
+    const datePickerInput = $('.datepicker-all').datepicker({
+        autoclose: true,
+        format: "dd/mm/yyyy",
+    })
+    
+    function table_laporan_bulanan_f() {
+        table_laporan_bulanan = $("#table_laporan_bulanan").DataTable({
+            processing: true,
+            serverSide: true,
+            searching: false,
+            lengthMenu: [
+                [12, 24, 36, -1],
+                ['12 baris', '24 baris', '36 baris', 'Lihat Semua']
+            ],
+            ajax: {
+                'url': '<?= base_url('api/laporan_bulanan') ?>',
+                'type': 'GET',
+                'beforeSend': function(request) {
+                    request.setRequestHeader("JWT", JWT);
+                },
+                data: function(d) {
+                    d.year = year
+                    d.month = month
+                },
+                error: function(error) {
+                    if(error.status === 401) {
+                        refreshAuth()
+                    } else if (error.status === 500) {
+                        toastr.error(respJson.message)
+                    }
+                    
+                }
+            },
+            columns: [{
+                    data: 'laporan_bulanan.id',
+                    name: 'laporan_bulanan.id',
+                    render: function(data, type, row, attr) {
+                        return attr.row + attr.settings._iDisplayStart + 1;
+                    },
+                    searchable: false,
+                    orderable: false
+                },
+                {
+                    data: 'lb_year',
+                    name: 'lb_year'
+                },
+                {
+                    data: 'lb_month',
+                    name: 'lb_month',
+                    render: (d, t, f) => {
+                        return getMonthName(d);
+                    }
+                },
+                { data: 'created_by', name: 'created_by'},
+                { data: 'updated_by', name: 'updated_by'},
+                { data: 'created_at', name: 'created_at'},
+                { data: 'updated_at', name: 'updated_at'},
+                {
+                    data: 'laporan_bulanan.id',
+                    name: 'laporan_bulanan.id',
+                    render: (d, t, f) => {
+                        return '<a href="' + f.file_download_path + '" target="_blank" class="btn btn-success btn-flat btn-sm"><i class="fa fa-download"></i></href>';
+                    }
+                },
+                {
+                    data: 'id',
+                    name: 'laporan_bulanan.id',
+                    render: (d, t, f) => {
+                        const edit = `<button onclick="edit(${d})" class="btn btn-primary btn-flat btn-sm"><i class="fa fa-wrench"></i></button>`;
+                        const remove = `<button onclick="remove(${d})" class="btn btn-danger btn-flat btn-sm"><i class="fa fa-trash"></i></button>`;
+                        return edit+' '+remove;
+                    }
+                }
+            ]
+        })
+    }
+
+    function setDefault() {
+        change_date()
+        $("#date_filter").val('<?= date('Y') ?>');
+        year = '<?= date("Y") ?>'
+        table_laporan_bulanan_f()
+    }
+
+    function change_date() {
+        const val = $("#date_type").val();
+        datePickerInput.datepicker('destroy');
+        year = undefined; month = undefined; day = undefined;
+        $("#date_filter").val('');
+        let newOptions = {}
+        switch (val) {
+            case '3':
+                newOptions = {autoclose: true, format: "yyyy", viewMode: "years", minViewMode: "years" }
+            break;
+            case '2':
+                newOptions = {autoclose: true, format: "mm/yyyy", viewMode: "months", minViewMode: "months" }
+            break;
+            case '1':
+                newOptions = {autoclose: true, format: "dd/mm/yyyy", viewMode: "days" }
+            break;
+        }
+        datePickerInput.datepicker(newOptions)
+    }
+
+    function search() {
+        table_laporan_bulanan.draw();
+    }
+
+    function parsing() {
+        const val = $("#date_filter").val();
+        if(val !== '') {
+            const date = val.split('/');
+            const length = date.length;
+            
+            console.log(length)
+            if(length == 1) {
+                year = date[0];
+            } 
+            if (length == 2) {
+                year = date[1];
+                month = date[0];
+            } 
+            if (length == 3) {
+                year = date[2];
+                month = date[1];
+                day = date[0];
+            }
+        }
+    }
 
     function filter() {
         table_laporan_bulanan.draw();

@@ -30,8 +30,9 @@ class Laporan_bulanan extends PKCC_Controller {
             ->resource($this->laporan_bulanan_m)
             ->view('file')
             ->filter(function($model) {
-                $year = ($this->input->get('year') == '') ? date("Y") : $this->input->get('year');
-                $model->where('laporan_bulanan.lb_year', $year);
+                if ($year = $this->input->get('year')) {
+                    $model->where('laporan_bulanan.lb_year',intval($year));
+                }
                 if ($month = $this->input->get('month')) {
                     $model->where('laporan_bulanan.lb_month',intval($month));
                 }
@@ -71,7 +72,7 @@ class Laporan_bulanan extends PKCC_Controller {
         $this->auth->user();
         $this->load->library('form_validation');
         $validations = [
-            ['field' => 'lb_year', 'label' => 'Tahun Laporan Bulanan', 'rules' => 'required|numeric'],
+            ['field' => 'lb_year', 'label' => 'Tahun Laporan Bulanan', 'rules' => 'required|numeric|min_length[4]|max_length[4]'],
             ['field' => 'lb_month', 'label' => 'Bulan Laporan Bulanan', 'rules' => 'required|numeric']
         ];
         if (empty($_FILES['file']['name']))
@@ -152,7 +153,7 @@ class Laporan_bulanan extends PKCC_Controller {
         $this->auth->user();
         $this->load->library('form_validation');
         $validations = [
-            ['field' => 'lb_year', 'label' => 'Tahun Laporan Bulanan', 'rules' => 'required|numeric'],
+            ['field' => 'lb_year', 'label' => 'Tahun Laporan Bulanan', 'rules' => 'required|numeric|min_length[4]|max_length[4]'],
             ['field' => 'lb_month', 'label' => 'Bulan Laporan Bulanan', 'rules' => 'required|numeric']
         ];
         $this->form_validation->set_rules($validations);   

@@ -5,7 +5,7 @@
             $is_active =  $url == $this->uri->uri_string;
         ?>
 
-
+        <li> <a href="<?= base_url(); ?>">Home</a> </li>
         <li class=" <?php echo $is_active ? 'active': '' ?>">
             <?php if($is_active): ?>
                 <?php echo ucfirst($segment) ?>

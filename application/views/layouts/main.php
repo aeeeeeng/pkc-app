@@ -44,6 +44,15 @@
                 viewMode: "years", 
                 minViewMode: "years"
             })
+            var url = window.location;
+            $('ul.navbar-nav a').filter(function() {
+                return this.href == url;
+            }).parent().siblings().removeClass('active').end().addClass('active');
+            $('ul.dropdown-menu a').filter(function() {
+                return this.href == url;
+            }).parentsUntil(".navbar-nav > .dropdown-menu").siblings()
+            .removeClass('active').end()
+            .addClass('active');
         })
         $(function($) {
           // /^\d*$/.test(value) INTEGER

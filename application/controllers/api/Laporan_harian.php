@@ -28,10 +28,12 @@ class Laporan_harian extends PKCC_Controller {
             ->resource($this->laporan_harian_m)
             ->view('file')
             ->filter(function($model){
-                $year = ($this->input->get('year') == '') ? date("Y") : $this->input->get('year');
-                $model->where('laporan_harian.lh_year', $year);
-                $month = ($this->input->get('month') == '') ? date("m") : $this->input->get('month');
-                $model->where('laporan_harian.lh_month', intval($month));
+                if($year = $this->input->get('year')) {
+                    $model->where('laporan_harian.lh_year', intval($year));
+                }
+                if($month = $this->input->get('month')) {
+                    $model->where('laporan_harian.lh_month', intval($month));
+                }
                 if($day = $this->input->get('day')) {
                     $model->where('laporan_harian.lh_day', intval($day));   
                 }
@@ -71,7 +73,7 @@ class Laporan_harian extends PKCC_Controller {
         $this->auth->user();
         $this->load->library('form_validation');
         $validation = [
-            ['field' => 'lh_year', 'label' => 'Tahun Laporan Harian', 'rules' => 'required|numeric'],
+            ['field' => 'lh_year', 'label' => 'Tahun Laporan Harian', 'rules' => 'required|numeric|min_length[4]|max_length[4]'],
             ['field' => 'lh_month', 'label' => 'Bulan Laporan Harian', 'rules' => 'required|numeric'],
             ['field' => 'lh_day', 'label' => 'Hari Laporan Harian', 'rules' => 'required|numeric'],
         ];
@@ -82,7 +84,7 @@ class Laporan_harian extends PKCC_Controller {
             if (isset($_FILES['file']) && is_uploaded_file($_FILES['file']['tmp_name'])) {
                 $lh_year = $this->input->post('lh_year');
                 $lh_month = $this->input->post('lh_month');
-                $lh_day = $this->input->post('lh_day');
+                $lh_day = str_pad($this->input->post('lh_day'), 2, "0", STR_PAD_LEFT);
                 $upload = $this->files->upload_file(date("Y/m/d/H/i/s").'-laporan_harian-'.$lh_day.'-'.$lh_month.'-'.$lh_year, './upload/documents/laporan_harian');   
                 if ($upload['success']) {
                     $message = $upload['message'];
@@ -97,9 +99,9 @@ class Laporan_harian extends PKCC_Controller {
                     $file_id = $this->files_m->insert_id();
                     $laporan_harian = [
                         'file_id' => $file_id,
-                        'lh_year' => $this->input->post('lh_year'),
-                        'lh_year' => $this->input->post('lh_year'),
-                        'lh_month' => $this->input->post('lh_month')
+                        'lh_year' => $lh_year,
+                        'lh_month' => $lh_month,
+                        'lh_day' => $lh_day
                     ];
                     $this->laporan_harian_m->insert($laporan_harian);
                     if($this->transaction->complete()){
@@ -162,7 +164,7 @@ class Laporan_harian extends PKCC_Controller {
         $this->form_validation->set_rules($validations);
         if($this->form_validation->run()){
             $this->transaction->start();
-            $lh_day = $this->input->post('lh_day');
+            $lh_day = str_pad($this->input->post('lh_day'), 2, "0", STR_PAD_LEFT);
             $lh_month = $this->input->post('lh_month');
             $lh_year = $this->input->post('lh_year');
             $message = [];
