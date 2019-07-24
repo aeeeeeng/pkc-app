@@ -1,5 +1,5 @@
 <?php $this->template->section('title') ?>
-Laporan Harian
+Balansitas
 <?php $this->template->endsection() ?>
 
 <?php $this->template->section('custom_css') ?>
@@ -9,7 +9,7 @@ Laporan Harian
     <section class="content">
         <div class="box">
             <div class="box-header">
-                <h3 class="box-title">Laporan Harian</h3>
+                <h3 class="box-title">Balansitas</h3>
             </div>
             <div class="box-body">
                 <div class="row">
@@ -48,7 +48,7 @@ Laporan Harian
                 <div class="row">
                     <div class="col-md-12">
                         <div class="table-responsive">
-                            <table class="table table-hover table-bordered table-pkc" id="table_laporan_harian">
+                            <table class="table table-hover table-bordered table-pkc" id="table_balansitas">
                                 <thead>
                                     <tr>
                                         <th>No</th>
@@ -77,18 +77,17 @@ Laporan Harian
 <?php $this->load->view('partials/javascript'); ?>
     <script>
         let year, month, day;
-        let table_laporan_harian;
+        let table_balansitas;
         const JWT = localStorage.getItem("JWT");
         $(document).ready(function(){
             setDefault();
         })
-         
         const datePickerInput = $('.datepicker-all').datepicker({
             autoclose: true,
             format: "dd/mm/yyyy",
         })
-        function table_laporan_harian_f() {
-            table_laporan_harian = $("#table_laporan_harian").DataTable({
+        function table_balansitas_f() {
+            table_balansitas = $("#table_balansitas").DataTable({
                 processing: true,
                 serverSide: true,
                 searching: false,
@@ -97,7 +96,7 @@ Laporan Harian
                     ['10 baris', '20 baris', '50 baris', 'Lihat Semua']
                 ],
                 ajax: {
-                    'url': '<?= base_url('api/laporan_harian') ?>',
+                    'url': '<?= base_url('api/balansitas') ?>',
                     'type': 'GET',
                     'beforeSend': function(request) {
                         request.setRequestHeader("JWT", JWT);
@@ -118,8 +117,8 @@ Laporan Harian
                 },
                 columns: [
                     {
-                        data: 'laporan_harian.id',
-                        name: 'laporan_harian.id',
+                        data: 'balansitas.id',
+                        name: 'balansitas.id',
                         render: function(data, type, row, attr) {
                             return attr.row + attr.settings._iDisplayStart + 1;
                         },
@@ -127,34 +126,34 @@ Laporan Harian
                         orderable: false
                     },
                     {
-                        data: 'lh_year',
-                        name: 'lh_year'
+                        data: 'balansitas_year',
+                        name: 'balansitas_year'
                     },
                     {
-                        data: 'lh_month',
-                        name: 'lh_month',
+                        data: 'balansitas_month',
+                        name: 'balansitas_month',
                         render: (d, t, f) => {
                             return getMonthName(d);
                         }
                     },
                     {
-                        data: 'lh_day',
-                        name: 'lh_day'
+                        data: 'balansitas_day',
+                        name: 'balansitas_day'
                     },
                     { data: 'created_by', name: 'created_by'},
                     { data: 'updated_by', name: 'updated_by'},
                     { data: 'created_at', name: 'created_at'},
                     { data: 'updated_at', name: 'updated_at'},
                     {
-                        data: 'laporan_harian.id',
-                        name: 'laporan_harian.id',
+                        data: 'balansitas.id',
+                        name: 'balansitas.id',
                         render: (d, t, f) => {
                             return '<a href="' + f.file_download_path + '" target="_blank" class="btn btn-success btn-flat btn-sm"><i class="fa fa-download"></i></href>';
                         }
                     },
                     {
                         data: 'id',
-                        name: 'laporan_harian.id',
+                        name: 'balansitas.id',
                         render: (d, t, f) => {
                             const edit = `<button onclick="edit(${d})" class="btn btn-primary btn-flat btn-sm"><i class="fa fa-wrench"></i></button>`;
                             const remove = `<button onclick="remove(${d})" class="btn btn-danger btn-flat btn-sm"><i class="fa fa-trash"></i></button>`;
@@ -169,7 +168,7 @@ Laporan Harian
             $("#date_filter").val('<?= date('Y/m') ?>');
             year = '<?= date("Y") ?>'
             month = '<?= date("m") ?>'
-            table_laporan_harian_f()
+            table_balansitas_f()
         }
         function change_date() {
             const val = $("#date_type").val();
@@ -191,7 +190,7 @@ Laporan Harian
             datePickerInput.datepicker(newOptions)
         }
         function search() {
-            table_laporan_harian.draw();
+            table_balansitas.draw();
         }
         function parsing() {
             const val = $("#date_filter").val();
@@ -216,10 +215,10 @@ Laporan Harian
         }
         function create() {
             $.ajax({
-                url: '<?= base_url('laporan_harian/create') ?>',
+                url: '<?= base_url('balansitas/create') ?>',
                 success: function(response) {
                     bootbox.dialog({
-                        title: 'Buat Laporan Harian',
+                        title: 'Buat Dokumen Balansitas',
                         message: response
                     });
                 }
@@ -227,14 +226,78 @@ Laporan Harian
         }
         function edit(id) {
             $.ajax({
-                url: '<?= base_url('laporan_harian/edit') ?>/'+id,
+                url: '<?= base_url('balansitas/edit') ?>/'+id,
                 success: function(response) {
                     bootbox.dialog({
-                        title: 'Edit Laporan Harian',
+                        title: 'Edit Dokument Balansitas',
                         message: response
                     });
                 }
             });
+        }
+        function store() {
+            event.preventDefault();    
+            $("div.form-group").removeClass('has-error');
+            $("div.form-group span.help-block").remove();
+            var formData = new FormData($("#form_create_balansitas")[0]);
+            $.ajax({
+                url: '<?= base_url('api/balansitas/store') ?>',
+                type: 'POST',
+                data: formData,
+                enctype: 'multipart/form-data',
+                cache: false,
+                contentType: false,
+                processData: false,
+                headers: { 'JWT': JWT }
+            }).done((response) => {
+                toastr.success('Berhasil di simpan')
+                bootbox.hideAll()
+                table_balansitas.draw();
+            }).fail((error) => {
+                const respJson = $.parseJSON(error.responseText)
+                Object.keys(respJson.message).map(function(key, index) {
+                    const formGroup = $("#" + key).closest('div.form-group')
+                    formGroup.addClass('has-error')
+                    formGroup.append(`<span class="help-block">${respJson.message[key]}</span>`)
+                });
+                if(error.status === 401) {
+                    refreshAuth()
+                } else if (error.status === 500) {
+                    toastr.error(respJson.message)
+                }
+            })
+        }
+        function update(id) {
+            event.preventDefault();    
+            $("div.form-group").removeClass('has-error');
+            $("div.form-group span.help-block").remove();
+            var formData = new FormData($("#form_create_balansitas")[0]);
+            $.ajax({
+                url: '<?= base_url('api/balansitas/update') ?>/'+id,
+                type: 'POST',
+                data: formData,
+                enctype: 'multipart/form-data',
+                cache: false,
+                contentType: false,
+                processData: false,
+                headers: { 'JWT': JWT }
+            }).done((response) => {
+                toastr.success('Berhasil di ubah')
+                bootbox.hideAll()
+                table_balansitas.draw();
+            }).fail((error) => {
+                const respJson = $.parseJSON(error.responseText)
+                Object.keys(respJson.message).map(function(key, index) {
+                    const formGroup = $("#" + key).closest('div.form-group')
+                    formGroup.addClass('has-error')
+                    formGroup.append(`<span class="help-block">${respJson.message[key]}</span>`)
+                });
+                if(error.status === 401) {
+                    refreshAuth()
+                } else if (error.status === 500) {
+                    toastr.error(respJson.message)
+                }
+            })
         }
         function remove(id) {
             bootbox.confirm({
@@ -252,13 +315,13 @@ Laporan Harian
                 callback: function (result) {
                     if(result) {
                         $.ajax({
-                            url: '<?= base_url('api/laporan_harian/destroy') ?>/'+id,
+                            url: '<?= base_url('api/balansitas/destroy') ?>/'+id,
                             type: 'DELETE',
                             headers: { 'JWT': JWT }
                         }).done(response => {
                             toastr.success('Berhasil di hapus')
                             bootbox.hideAll()
-                            table_laporan_harian.draw();
+                            table_balansitas.draw();
                         }).fail(error => {
                             const respJson = $.parseJSON(error.responseText)
                             Object.keys(respJson.message).map(function(key, index) {
@@ -277,71 +340,6 @@ Laporan Harian
             });
             
         }
-        function update(id) {
-            event.preventDefault();    
-            $("div.form-group").removeClass('has-error');
-            $("div.form-group span.help-block").remove();
-            var formData = new FormData($("#form_create_laphar")[0]);
-            $.ajax({
-                url: '<?= base_url('api/laporan_harian/update') ?>/'+id,
-                type: 'POST',
-                data: formData,
-                enctype: 'multipart/form-data',
-                cache: false,
-                contentType: false,
-                processData: false,
-                headers: { 'JWT': JWT }
-            }).done((response) => {
-                toastr.success('Berhasil di ubah')
-                bootbox.hideAll()
-                table_laporan_harian.draw();
-            }).fail((error) => {
-                const respJson = $.parseJSON(error.responseText)
-                Object.keys(respJson.message).map(function(key, index) {
-                    const formGroup = $("#" + key).closest('div.form-group')
-                    formGroup.addClass('has-error')
-                    formGroup.append(`<span class="help-block">${respJson.message[key]}</span>`)
-                });
-                if(error.status === 401) {
-                    refreshAuth()
-                } else if (error.status === 500) {
-                    toastr.error(respJson.message)
-                }
-            })
-        }
-        function store() {
-            event.preventDefault();    
-            $("div.form-group").removeClass('has-error');
-            $("div.form-group span.help-block").remove();
-            var formData = new FormData($("#form_create_laphar")[0]);
-            $.ajax({
-                url: '<?= base_url('api/laporan_harian/store') ?>',
-                type: 'POST',
-                data: formData,
-                enctype: 'multipart/form-data',
-                cache: false,
-                contentType: false,
-                processData: false,
-                headers: { 'JWT': JWT }
-            }).done((response) => {
-                toastr.success('Berhasil di simpan')
-                bootbox.hideAll()
-                table_laporan_harian.draw();
-            }).fail((error) => {
-                const respJson = $.parseJSON(error.responseText)
-                Object.keys(respJson.message).map(function(key, index) {
-                    const formGroup = $("#" + key).closest('div.form-group')
-                    formGroup.addClass('has-error')
-                    formGroup.append(`<span class="help-block">${respJson.message[key]}</span>`)
-                });
-                if(error.status === 401) {
-                    refreshAuth()
-                } else if (error.status === 500) {
-                    toastr.error(respJson.message)
-                }
-            })
-        }
-        
     </script>
 <?php $this->template->endsection() ?>
 <?php $this->template->view('layouts/main') ?>

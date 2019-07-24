@@ -28,10 +28,12 @@ class Balansitas extends PKCC_Controller {
             ->resource($this->balansitas_m)
             ->view('file')
             ->filter(function($model){
-                $year = ($this->input->get('year') == '') ? date("Y") : $this->input->get('year');
-                $model->where('balansitas.balansitas_year', $year);
-                $month = ($this->input->get('month') == '') ? date("m") : $this->input->get('month');
-                $model->where('balansitas.balansitas_month', intval($month));
+                if($year = $this->input->get('year')) {
+                    $model->where('balansitas.balansitas_year', intval($year));
+                }
+                if($month = $this->input->get('month')) {
+                    $model->where('balansitas.balansitas_month', intval($month));
+                }
                 if($day = $this->input->get('day')) {
                     $model->where('balansitas.balansitas_day', intval($day));   
                 }
@@ -71,7 +73,7 @@ class Balansitas extends PKCC_Controller {
         $this->auth->user();
         $this->load->library('form_validation');
         $validation = [
-            ['field' => 'balansitas_year', 'label' => 'Tahun Balansitas', 'rules' => 'required|numeric'],
+            ['field' => 'balansitas_year', 'label' => 'Tahun Balansitas', 'rules' => 'required|numeric|min_length[4]|max_length[4]'],
             ['field' => 'balansitas_month', 'label' => 'Bulan Balansitas', 'rules' => 'required|numeric'],
             ['field' => 'balansitas_day', 'label' => 'Hari Balansitas', 'rules' => 'required|numeric'],
         ];
@@ -82,7 +84,7 @@ class Balansitas extends PKCC_Controller {
             if (isset($_FILES['file']) && is_uploaded_file($_FILES['file']['tmp_name'])) { 
                 $balansitas_year = $this->input->post('balansitas_year');
                 $balansitas_month = $this->input->post('balansitas_month');
-                $balansitas_day = $this->input->post('balansitas_day');
+                $balansitas_day = str_pad($this->input->post('balansitas_day'), 2, "0", STR_PAD_LEFT);
                 $upload = $this->files->upload_file(date("Y/m/d/H/i/s").'-balansitas-'.$balansitas_day.'-'.$balansitas_month.'-'.$balansitas_year, './upload/documents/balansitas');   
                 if($upload['success']) {
                     $message = $upload['message'];
@@ -97,9 +99,9 @@ class Balansitas extends PKCC_Controller {
                     $file_id = $this->files_m->insert_id();
                     $balansitas = [
                         'file_id' => $file_id,
-                        'balansitas_year' => $this->input->post('balansitas_year'),
-                        'balansitas_month' => $this->input->post('balansitas_month'),
-                        'balansitas_day' => $this->input->post('balansitas_day')
+                        'balansitas_year' => $balansitas_year,
+                        'balansitas_month' => $balansitas_month,
+                        'balansitas_day' => $balansitas_day
                     ];
                     $this->balansitas_m->insert($balansitas);
                     if($this->transaction->complete()){
@@ -155,7 +157,7 @@ class Balansitas extends PKCC_Controller {
         $this->auth->user();
         $this->load->library('form_validation');
         $validations = [
-            ['field' => 'balansitas_year', 'label' => 'Tahun Balansitas', 'rules' => 'required|numeric'],
+            ['field' => 'balansitas_year', 'label' => 'Tahun Balansitas', 'rules' => 'required|numeric|min_length[4]|max_length[4]'],
             ['field' => 'balansitas_month', 'label' => 'Bulan Balansitas', 'rules' => 'required|numeric'],
             ['field' => 'balansitas_day', 'label' => 'Hari Balansitas', 'rules' => 'required|numeric'],
         ];
@@ -164,7 +166,7 @@ class Balansitas extends PKCC_Controller {
             $this->transaction->start();
             $balansitas_year = $this->input->post('balansitas_year');
             $balansitas_month = $this->input->post('balansitas_month');
-            $balansitas_day = $this->input->post('balansitas_day');
+            $balansitas_day = str_pad($this->input->post('balansitas_day'), 2, "0", STR_PAD_LEFT);
             $message = [];
             if (isset($_FILES['file']) && is_uploaded_file($_FILES['file']['tmp_name'])) {
                 $old_balansitas = $this->balansitas_m->find($id);
