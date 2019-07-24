@@ -28,8 +28,9 @@ class Buku_pintar extends PKCC_Controller {
             ->resource($this->buku_pintar_m)
             ->view('file')
             ->filter(function($model){
-                $year = ($this->input->get('year') == '') ? date("Y") : $this->input->get('year');
-                $model->where('buku_pintar.bp_year', $year);
+                if ($year = $this->input->get('year')) {
+                    $model->where('buku_pintar.bp_year', $year);   
+                }
                 if ($month = $this->input->get('month')) {
                     $model->where('buku_pintar.bp_month',intval($month));
                 }
@@ -70,7 +71,7 @@ class Buku_pintar extends PKCC_Controller {
         $this->load->library('form_validation');
         $validations = [
             ['field' => 'bp_month', 'label' => 'Bulan Buku Pintar', 'rules' => 'required|numeric'],
-            ['field' => 'bp_year', 'label' => 'Tahun Buku Pintar', 'rules' => 'required|numeric']
+            ['field' => 'bp_year', 'label' => 'Tahun Buku Pintar', 'rules' => 'required|numeric|min_length[4]|max_length[4]']
         ];
         if (empty($_FILES['file']['name']))
             array_push($validations, ['field' => 'file', 'label' => 'File', 'rules' => 'required']);
@@ -149,7 +150,7 @@ class Buku_pintar extends PKCC_Controller {
         $this->load->library('form_validation');
         $validations = [
             ['field' => 'bp_month', 'label' => 'Bulan Buku Pintar', 'rules' => 'required|numeric'],
-            ['field' => 'bp_year', 'label' => 'Tahun Buku Pintar', 'rules' => 'required|numeric']
+            ['field' => 'bp_year', 'label' => 'Tahun Buku Pintar', 'rules' => 'required|numeric|min_length[4]|max_length[4]']
         ];
         $this->form_validation->set_rules($validations);
         if($this->form_validation->run()) {
