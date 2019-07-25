@@ -3,6 +3,12 @@
 <?php $this->template->endsection() ?>
 
 <?php $this->template->section('custom_css') ?>
+    <style>
+        .col-centered{
+            float: none;
+            margin: 0 auto;
+        }
+    </style>
 <?php $this->template->endsection() ?>
 
 <?php $this->template->section('content') ?>
@@ -12,7 +18,31 @@
                 <h3 class="box-title">Home</h3>
             </div>
             <div class="box-body">
-                The great content goes here
+                <div class="row">
+                    <div class="col-lg-4 col-centered">
+                        <a class="btn btn-app bg-red">
+                            <i class="fa fa-edit"></i> Edit
+                        </a>
+                        <a class="btn btn-app bg-red">
+                            <i class="fa fa-edit"></i> Edit
+                        </a>
+                        <a class="btn btn-app bg-red">
+                            <i class="fa fa-edit"></i> Edit
+                        </a>
+                        <a class="btn btn-app bg-red">
+                            <i class="fa fa-edit"></i> Edit
+                        </a>
+                        <a class="btn btn-app bg-red">
+                            <i class="fa fa-edit"></i> Edit
+                        </a>
+                        <a class="btn btn-app bg-red">
+                            <i class="fa fa-edit"></i> Edit
+                        </a>
+                        <a class="btn btn-app bg-red">
+                            <i class="fa fa-edit"></i> Edit
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

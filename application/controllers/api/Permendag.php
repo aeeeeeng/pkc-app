@@ -68,7 +68,7 @@ class Permendag extends PKCC_Controller {
         $this->auth->user();
         $this->load->library('form_validation');
         $validations = [
-            ['field' => 'permendag_year', 'label' => 'Tahun Permendag', 'rules' => 'required|numeric'],
+            ['field' => 'permendag_year', 'label' => 'Tahun Permendag', 'rules' => 'required|numeric|min_length[4]|max_length[4]'],
             ['field' => 'permendag_number', 'label' => 'Nomor Permendag', 'rules' => 'required'],
             ['field' => 'permendag_description', 'label' => 'Perihal Permendag', 'rules' => 'required']
         ];
@@ -152,7 +152,7 @@ class Permendag extends PKCC_Controller {
         $this->auth->user();
         $this->load->library('form_validation');
         $validations = [
-            ['field' => 'permendag_year', 'label' => 'Tahun Permendag', 'rules' => 'required|numeric'],
+            ['field' => 'permendag_year', 'label' => 'Tahun Permendag', 'rules' => 'required|numeric|min_length[4]|max_length[4]'],
             ['field' => 'permendag_number', 'label' => 'Nomor Permendag', 'rules' => 'required'],
             ['field' => 'permendag_description', 'label' => 'Perihal Permendag', 'rules' => 'required']
         ];

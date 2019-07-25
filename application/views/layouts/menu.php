@@ -22,7 +22,7 @@
                 <li><a href="<?= base_url('permendag') ?>">Permendag</a></li>
                 <li><a href="<?= base_url('permentan') ?>">Permentan</a></li>
                 <li><a href="<?= base_url('sk_provinsi') ?>">SK provinsi</a></li>
-                <li><a href="<?= base_url('srt_pi') ?>">Surat PIHC</a></li>
+                <li><a href="<?= base_url('surat_pupuk_indonesia') ?>">Surat PIHC</a></li>
             </ul>
         </li>
         <li class="dropdown">

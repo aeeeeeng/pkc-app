@@ -70,7 +70,7 @@ class Srt_pi extends PKCC_Controller {
         
         $validations = [
             ['field' => 'sp_number', 'label' => 'Nomor Surat Peraturan', 'rules' => 'required'],
-            ['field' => 'sp_year', 'label' => 'Tahun Surat Peraturan', 'rules' => 'required|numeric'],
+            ['field' => 'sp_year', 'label' => 'Tahun Surat Peraturan', 'rules' => 'required|numeric|min_length[4]|max_length[4]'],
             ['field' => 'sp_description', 'label' => 'Perihal Surat Peraturan', 'rules' => 'required'],
         ];
         if (empty($_FILES['file']['name']))
