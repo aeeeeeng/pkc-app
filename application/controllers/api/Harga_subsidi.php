@@ -16,8 +16,9 @@ class Harga_subsidi extends PKCC_Controller {
         $this->load->library('transaction');
         $this->load->library('files');
         $this->load->library('auth');           
+        $this->load->library('general');           
     }
-
+    
     public function index()
     {
         $this->is_GET();
@@ -26,6 +27,21 @@ class Harga_subsidi extends PKCC_Controller {
         try {
             $harga_subsidi = $this->datatable->resource($this->harga_subsidi_m)
             ->view('file')
+            ->edit_column('hs_urea', function($model){
+                return $this->general->number_beautify($model->hs_urea);
+            })
+            ->edit_column('hs_npk', function($model){
+                return $this->general->number_beautify($model->hs_npk);
+            })
+            ->edit_column('hs_organik', function($model){
+                return $this->general->number_beautify($model->hs_organik);
+            })
+            ->edit_column('created_at', function($model){
+                return $this->general->tgl_ind($model->created_at);
+            })
+            ->edit_column('updated_at', function($model){
+                return $this->general->tgl_ind($model->updated_at);
+            })
             ->filter(function($model){
                 if($year = $this->input->get('year')) {
                     $model->where('harga_subsidi.hs_year', intval($year));   
@@ -38,7 +54,8 @@ class Harga_subsidi extends PKCC_Controller {
                 if($sort_by = $this->input->get('sort_by') && $sort_type = $this->input->get('sort_type')) {
                     $model->order_by($sort_by, $sort_type);
                 }
-            })->generate(TRUE); 
+            })
+            ->generate(TRUE); 
             $this->status = 200;
             $harga_subsidi['success'] = TRUE;
             $harga_subsidi['message'] = 'Data fetched';
@@ -70,9 +87,9 @@ class Harga_subsidi extends PKCC_Controller {
             ['field' => 'hs_year', 'label' => 'Tahun Harga Tebus Subsidi', 'rules' => 'required|numeric'],
             ['field' => 'hs_number', 'label' => 'Nomor Harga Tebus Subsidi', 'rules' => 'required'],
             ['field' => 'hs_description', 'label' => 'Perihal Harga Tebus Subsidi', 'rules' => 'required'],
-            ['field' => 'hs_urea', 'label' => 'Rata2 Harga Tebus Urea', 'rules' => 'required'],
-            ['field' => 'hs_npk', 'label' => 'Rata2 Harga Tebus NPK', 'rules' => 'required'],
-            ['field' => 'hs_organik', 'label' => 'Rata2 Harga Tebus Organik', 'rules' => 'required'],
+            ['field' => 'hs_urea', 'label' => 'Rata2 Harga Tebus Urea', 'rules' => 'required|numeric'],
+            ['field' => 'hs_npk', 'label' => 'Rata2 Harga Tebus NPK', 'rules' => 'required|numeric'],
+            ['field' => 'hs_organik', 'label' => 'Rata2 Harga Tebus Organik', 'rules' => 'required|numeric'],
         ];
         if (empty($_FILES['file']['name']))
             array_push($validations, ['field' => 'file', 'label' => 'File', 'rules' => 'required']);
@@ -144,6 +161,9 @@ class Harga_subsidi extends PKCC_Controller {
         $this->auth->user();
         try {
             $harga_subsidi = $this->harga_subsidi_m->view('file')->find($id);
+            $harga_subsidi->hs_urea = $this->general->number_beautify($harga_subsidi->hs_urea);
+            $harga_subsidi->hs_npk = $this->general->number_beautify($harga_subsidi->hs_npk);
+            $harga_subsidi->hs_organik = $this->general->number_beautify($harga_subsidi->hs_organik);
             $this->status = 200;
             $this->result = ['success' => TRUE, 'message' => 'data fetched', 'data' => $harga_subsidi];
         } catch(Exception $e) {
@@ -163,9 +183,9 @@ class Harga_subsidi extends PKCC_Controller {
             ['field' => 'hs_year', 'label' => 'Tahun Harga Tebus Subsidi', 'rules' => 'required|numeric'],
             ['field' => 'hs_number', 'label' => 'Nomor Harga Tebus Subsidi', 'rules' => 'required'],
             ['field' => 'hs_description', 'label' => 'Perihal Harga Tebus Subsidi', 'rules' => 'required'],
-            ['field' => 'hs_urea', 'label' => 'Rata2 Harga Tebus Urea', 'rules' => 'required'],
-            ['field' => 'hs_npk', 'label' => 'Rata2 Harga Tebus NPK', 'rules' => 'required'],
-            ['field' => 'hs_organik', 'label' => 'Rata2 Harga Tebus Organik', 'rules' => 'required'],
+            ['field' => 'hs_urea', 'label' => 'Rata2 Harga Tebus Urea', 'rules' => 'required|numeric'],
+            ['field' => 'hs_npk', 'label' => 'Rata2 Harga Tebus NPK', 'rules' => 'required|numeric'],
+            ['field' => 'hs_organik', 'label' => 'Rata2 Harga Tebus Organik', 'rules' => 'required|numeric'],
         ];
         $this->form_validation->set_rules($validations);
         if($this->form_validation->run()){

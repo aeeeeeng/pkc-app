@@ -1,5 +1,5 @@
 <?php $this->template->section('title') ?>
-Permentan
+Harga Tebus Subsidi
 <?php $this->template->endsection() ?>
 
 <?php $this->template->section('custom_css') ?>
@@ -9,7 +9,7 @@ Permentan
     <section class="content">
         <div class="box">
             <div class="box-header">
-                <h3 class="box-title">Permentan</h3>
+                <h3 class="box-title">Harga Tebus Subsidi</h3>
             </div>
             <div class="box-body">
                 <div class="row">
@@ -47,22 +47,22 @@ Permentan
                 <div class="row">
                     <div class="col-md-12">
                         <div class="table-responsive">
-                            <table class="table table-hover table-bordered table-pkc" id="table_permentan">
+                            <table class="table table-hover table-bordered table-pkc" id="table_harga_tebus_subsidi">
                                 <thead>
                                     <tr>
                                         <th>No</th>
                                         <th>Tahun</th>
-                                        <th>No Peraturan</th>
+                                        <th>Nomor Surat</th>
                                         <th>Perihal</th>
-                                        <th>Alk. Urea</th>
-                                        <th>Alk. NPK</th>
-                                        <th>Alk. Organik</th>
+                                        <th>Rata2 Harga Tebus Urea</th>
+                                        <th>Rata2 Harga Tebus NPK</th>
+                                        <th>Rata2 Harga Tebus ORG</th>
                                         <th>Di Buat</th>
                                         <th>Di Ubah</th>
                                         <th>Tanggal Buat</th>
                                         <th>Tanggal Ubah</th>
                                         <th>File</th>
-                                        <th width="1">Aksi</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -79,14 +79,14 @@ Permentan
 <?php $this->load->view('partials/javascript'); ?>
     <script>
         let year;
-        let table_permentan;
+        let table_harga_tebus_subsidi;
         const JWT = localStorage.getItem("JWT");
         $(document).ready(function(){
             setDefault();
         })
         const datePickerInput = $('.datepicker-all').datepicker({autoclose: true, format: "yyyy", viewMode: "years", minViewMode: "years" })
-        function table_permentan_f() {
-            table_permentan = $("#table_permentan").DataTable({
+        function table_harga_tebus_subsidi_f() {
+            table_harga_tebus_subsidi = $("#table_harga_tebus_subsidi").DataTable({
                 processing: true,
                 serverSide: true,
                 searching: true,
@@ -95,7 +95,7 @@ Permentan
                     ['10 baris', '20 baris', '50 baris', 'Lihat Semua']
                 ],
                 ajax: {
-                    'url': '<?= base_url('api/permentan') ?>',
+                    'url': '<?= base_url('api/harga_subsidi') ?>',
                     'type': 'GET',
                     'beforeSend': function(request) {
                         request.setRequestHeader("JWT", JWT);
@@ -114,34 +114,34 @@ Permentan
                 },
                 columns: [
                     {
-                        data: 'permentan.id',
-                        name: 'permentan.id',
+                        data: 'harga_subsidi.id',
+                        name: 'harga_subsidi.id',
                         render: function(data, type, row, attr) {
                             return attr.row + attr.settings._iDisplayStart + 1;
                         },
                         searchable: false,
                         orderable: false
                     },
-                    { data: 'permentan_year', name: 'permentan_year' },
-                    { data: 'permentan_number', name: 'permentan_number'},
-                    { data: 'permentan_description', name: 'permentan_description'},
-                    { data: 'permentan_total_urea', name: 'permentan_total_urea', className: "text-right"},
-                    { data: 'permentan_total_npk', name: 'permentan_total_npk', className: "text-right"},
-                    { data: 'permentan_total_organik', name: 'permentan_total_organik', className: "text-right"},
+                    {data: 'hs_year',name: 'hs_year'},
+                    {data: 'hs_number',name: 'hs_number'},
+                    {data: 'hs_description',name: 'hs_description'},
+                    {data: 'hs_urea',name: 'hs_urea', className: "text-right"},
+                    {data: 'hs_npk',name: 'hs_npk', className: "text-right"},
+                    {data: 'hs_organik',name: 'hs_organik', className: "text-right"},
                     { data: 'created_by', name: 'created_by'},
                     { data: 'updated_by', name: 'updated_by'},
                     { data: 'created_at', name: 'created_at'},
                     { data: 'updated_at', name: 'updated_at'},
                     {
-                        data: 'permentan.id',
-                        name: 'permentan.id',
+                        data: 'harga_subsidi.id',
+                        name: 'harga_subsidi.id',
                         render: (d, t, f) => {
                             return '<a href="' + f.file_download_path + '" target="_blank" class="btn btn-success btn-flat btn-sm"><i class="fa fa-download"></i></href>';
                         }
-                    },
+                    },   
                     {
                         data: 'id',
-                        name: 'permentan.id',
+                        name: 'harga_subsidi.id',
                         render: (d, t, f) => {
                             const edit = `<button onclick="edit(${d})" class="btn btn-primary btn-flat btn-sm"><i class="fa fa-wrench"></i></button>`;
                             const remove = `<button onclick="remove(${d})" class="btn btn-danger btn-flat btn-sm"><i class="fa fa-trash"></i></button>`;
@@ -153,7 +153,7 @@ Permentan
         }
         function setDefault() {
             change_date()
-            table_permentan_f();
+            table_harga_tebus_subsidi_f();
         }
         function change_date() {
             const val = $("#date_type").val();
@@ -165,7 +165,7 @@ Permentan
             datePickerInput.datepicker(newOptions)
         }
         function search() {
-            table_permentan.draw();
+            table_harga_tebus_subsidi.draw();
         }
         function parsing() {
             const val = $("#date_filter").val();
@@ -182,10 +182,10 @@ Permentan
         }
         function create() {
             $.ajax({
-                url: '<?= base_url('permentan/create') ?>',
+                url: '<?= base_url('harga_tebus_subsidi/create') ?>',
                 success: function(response) {
                     bootbox.dialog({
-                        title: 'Buat Dokumen Permentan',
+                        title: 'Buat Dokumen Harga Tebus Subsidi',
                         message: response
                     });
                 }
@@ -193,10 +193,10 @@ Permentan
         }
         function edit(id) {
             $.ajax({
-                url: '<?= base_url('permentan/edit') ?>/'+id,
+                url: '<?= base_url('harga_tebus_subsidi/edit') ?>/'+id,
                 success: function(response) {
                     bootbox.dialog({
-                        title: 'Edit Dokument Permentan',
+                        title: 'Edit Dokumen Harga Tebus Subsidi',
                         message: response
                     });
                 }
@@ -206,9 +206,12 @@ Permentan
             event.preventDefault();    
             $("div.form-group").removeClass('has-error');
             $("div.form-group span.help-block").remove();
-            var formData = new FormData($("#form_create_permentan")[0]);
+            let formData = new FormData($("#form_create_hs")[0]);
+            formData.set('hs_urea', $("#hs_urea").val().replace(/\./g, ''));
+            formData.set('hs_npk', $("#hs_npk").val().replace(/\./g, ''));
+            formData.set('hs_organik', $("#hs_organik").val().replace(/\./g, ''));
             $.ajax({
-                url: '<?= base_url('api/permentan/store') ?>',
+                url: '<?= base_url('api/harga_subsidi/store') ?>',
                 type: 'POST',
                 data: formData,
                 enctype: 'multipart/form-data',
@@ -219,7 +222,7 @@ Permentan
             }).done((response) => {
                 toastr.success('Berhasil di simpan')
                 bootbox.hideAll()
-                table_permentan.draw();
+                table_harga_tebus_subsidi.draw();
             }).fail((error) => {
                 const respJson = $.parseJSON(error.responseText)
                 Object.keys(respJson.message).map(function(key, index) {
@@ -238,9 +241,12 @@ Permentan
             event.preventDefault();    
             $("div.form-group").removeClass('has-error');
             $("div.form-group span.help-block").remove();
-            var formData = new FormData($("#form_edit_permentan")[0]);
+            var formData = new FormData($("#form_edit_hs")[0]);
+            formData.set('hs_urea', $("#hs_urea").val().replace(/\./g, ''));
+            formData.set('hs_npk', $("#hs_npk").val().replace(/\./g, ''));
+            formData.set('hs_organik', $("#hs_organik").val().replace(/\./g, ''));
             $.ajax({
-                url: '<?= base_url('api/permentan/update') ?>/'+id,
+                url: '<?= base_url('api/harga_subsidi/update') ?>/'+id,
                 type: 'POST',
                 data: formData,
                 enctype: 'multipart/form-data',
@@ -251,7 +257,7 @@ Permentan
             }).done((response) => {
                 toastr.success('Berhasil di ubah')
                 bootbox.hideAll()
-                table_permentan.draw();
+                table_harga_tebus_subsidi.draw();
             }).fail((error) => {
                 const respJson = $.parseJSON(error.responseText)
                 Object.keys(respJson.message).map(function(key, index) {
@@ -282,13 +288,13 @@ Permentan
                 callback: function (result) {
                     if(result) {
                         $.ajax({
-                            url: '<?= base_url('api/permentan/destroy') ?>/'+id,
+                            url: '<?= base_url('api/harga_subsidi/destroy') ?>/'+id,
                             type: 'DELETE',
                             headers: { 'JWT': JWT }
                         }).done(response => {
                             toastr.success('Berhasil di hapus')
                             bootbox.hideAll()
-                            table_permentan.draw();
+                            table_harga_tebus_subsidi.draw();
                         }).fail(error => {
                             const respJson = $.parseJSON(error.responseText)
                             Object.keys(respJson.message).map(function(key, index) {
