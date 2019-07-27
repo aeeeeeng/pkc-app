@@ -16,6 +16,7 @@ class Sk_provinsi extends PKCC_Controller {
         $this->load->library('transaction');
         $this->load->library('files');
         $this->load->library('auth');           
+        $this->load->library('general');           
     }
 
     public function index()
@@ -27,6 +28,12 @@ class Sk_provinsi extends PKCC_Controller {
             $skp = $this->datatable
             ->resource($this->sk_provinsi_m)
             ->view('file')
+            ->edit_column('created_at', function($model){
+                return $this->general->tgl_ind($model->created_at);
+            })
+            ->edit_column('updated_at', function($model){
+                return $this->general->tgl_ind($model->updated_at);
+            })
             ->filter(function($model){
                 if($year = $this->input->get('year')) {
                     $model->where('sk_provinsi.sp_year', intval($year));   

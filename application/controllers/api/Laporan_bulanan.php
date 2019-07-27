@@ -15,8 +15,8 @@ class Laporan_bulanan extends PKCC_Controller {
         $this->load->model('files/files_m');
         $this->load->library('transaction');
         $this->load->library('files');
-        
         $this->load->library('auth');
+        $this->load->library('general');
         
     }
 
@@ -29,6 +29,12 @@ class Laporan_bulanan extends PKCC_Controller {
             $lap_bul = $this->datatable
             ->resource($this->laporan_bulanan_m)
             ->view('file')
+            ->edit_column('created_at', function($model){
+                return $this->general->tgl_ind($model->created_at);
+            })
+            ->edit_column('updated_at', function($model){
+                return $this->general->tgl_ind($model->updated_at);
+            })
             ->filter(function($model) {
                 if ($year = $this->input->get('year')) {
                     $model->where('laporan_bulanan.lb_year',intval($year));

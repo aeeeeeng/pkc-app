@@ -16,6 +16,7 @@ class Srt_pi extends PKCC_Controller {
         $this->load->library('transaction');
         $this->load->library('files');
         $this->load->library('auth');           
+        $this->load->library('general');           
     }
 
     public function index()
@@ -27,6 +28,12 @@ class Srt_pi extends PKCC_Controller {
             $srt_pi = $this->datatable
             ->resource($this->srt_pi_m)
             ->view('file')
+            ->edit_column('created_at', function($model){
+                return $this->general->tgl_ind($model->created_at);
+            })
+            ->edit_column('updated_at', function($model){
+                return $this->general->tgl_ind($model->updated_at);
+            })
             ->filter(function($model){
                 if($year = $this->input->get('year')) {
                     $model->where('srt_pi.sp_year', intval($year));

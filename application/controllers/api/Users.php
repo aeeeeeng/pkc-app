@@ -15,6 +15,7 @@ class Users extends PKCC_Controller {
         $this->load->model('users/users_m');
         $this->load->library('auth');
         $this->load->helper('url');
+        $this->load->library('general');
     }
 
     public function index()
@@ -23,7 +24,14 @@ class Users extends PKCC_Controller {
         $this->auth->user();
         $this->load->library('datatable');
         try{
-            $user = $this->datatable->resource($this->users_m)->generate(true);
+            $user = $this->datatable->resource($this->users_m)
+            ->edit_column('created_at', function($model){
+                return $this->general->tgl_ind($model->created_at);
+            })
+            ->edit_column('updated_at', function($model){
+                return $this->general->tgl_ind($model->updated_at);
+            })
+            ->generate(true);
             $this->status = 200;
             $user['success'] = TRUE;
             $user['message'] = 'Data Fetched';
