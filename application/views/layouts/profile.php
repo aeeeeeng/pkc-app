@@ -2,7 +2,7 @@
     <li class="dropdown user user-menu">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <img src="<?= base_url('assets/dist/img/user-profile.png') ?>" class="user-image" alt="User Image">
-            <span id="username" class="hidden-xs">Alexander Pierce</span>
+            <span id="username_profile" class="hidden-xs">Alexander Pierce</span>
         </a>
         <ul class="dropdown-menu">
             <li id="profileContent" class="user-header"></li>
@@ -38,7 +38,7 @@
                     url: '<?= base_url('api/users/refresh') ?>',
                     headers: { 'JWT': JWT }
                 }).done((response, textStatus, jqXHR) => {
-                    $("span#username").html(response.username)
+                    $("span#username_profile").html(response.username)
                     $("li#profileContent").html(`
                         
                         <p>

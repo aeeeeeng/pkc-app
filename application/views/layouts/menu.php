@@ -39,5 +39,8 @@
                 <li><a href="<?= base_url('stok_non_subsidi') ?>">Stok Non Subsidi</a></li>
             </ul>
         </li>
+        <li class="">
+            <a href="<?= base_url('users') ?>">User Management </a>
+        </li>
     </ul>
 </div>

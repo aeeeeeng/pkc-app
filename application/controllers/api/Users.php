@@ -25,7 +25,9 @@ class Users extends PKCC_Controller {
         try{
             $user = $this->datatable->resource($this->users_m)->generate(true);
             $this->status = 200;
-            $this->result = ['success' => TRUE, 'message' => $user];
+            $user['success'] = TRUE;
+            $user['message'] = 'Data Fetched';
+            $this->result = $user;
         } catch (Exception $e) {
             $this->status = 500;
             $this->result = ['success' => FALSE, 'message' => $e->getMessage()];
@@ -140,17 +142,32 @@ class Users extends PKCC_Controller {
 
     public function update($id)
     {
-        $this->is_PUT();
+        $this->is_POST();
         $this->auth->user();
         $input = $this->input->raw_input_stream;
         $user_input = json_decode($input, true);
-        try {
-            $this->users_m->update($id, $user_input);
-            $this->status = 200;
-            $this->result = ['success' => TRUE, 'message' => 'update data berhasil', 'data' => $user_input];
-        } catch(Exception $e) {
-            $this->status = 500;
-            $this->result = ['success' => TRUE, 'message' => $e->getMessage()];
+        $_POST = $user_input;
+        $this->load->library('form_validation');
+        $validation = [
+            ['field' => 'first_name', 'label' => 'First Name', 'rules' => 'required'],
+            ['field' => 'access', 'label' => 'Access', 'rules' => 'required']
+        ];
+        $this->form_validation->set_rules($validation);
+        if($this->form_validation->run()){
+            if(empty($user_input['password']) || $user_input['password'] == '') {
+                unset($user_input['password']);
+            }
+            try {
+                $this->users_m->update($id, $user_input);
+                $this->status = 200;
+                $this->result = ['success' => TRUE, 'message' => 'update data berhasil', 'data' => $user_input];
+            } catch(Exception $e) {
+                $this->status = 500;
+                $this->result = ['success' => TRUE, 'message' => $e->getMessage()];
+            }
+        } else {
+            $this->status = 400;
+            $this->result = ['success' => FALSE, 'message' => $this->form_validation->error_array()];
         }
         $this->output->set_content_type('application/json')
         ->set_status_header($this->status)->set_output(json_encode($this->result));

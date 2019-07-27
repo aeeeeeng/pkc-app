@@ -6,7 +6,7 @@
         protected $table = 'users'; 
         protected $primary_key = 'id'; 
         protected $fillable = array('username', 'password', 'email', 'first_name', 'last_name', 'full_name', 'access'); 
-        protected $authors = FALSE;
+        protected $authors = TRUE;
         protected $timestamps = TRUE;
         protected $set_default = [];
 
