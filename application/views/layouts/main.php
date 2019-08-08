@@ -4,7 +4,7 @@
   <?php $this->load->view('layouts/header'); ?>
   <?= $this->template->render('custom_css'); ?>
 </head>
-<body class="hold-transition skin-black layout-top-nav">
+<body class="hold-transition skin-black layout-top-nav fixed">
 <div class="full-loading"></div>
 <div class="wrapper">
 
@@ -12,7 +12,9 @@
     <nav class="navbar navbar-static-top">
       <div class="container">
         <div class="navbar-header">
-          <a href="<?= base_url() ?>" class="navbar-brand"><b>DOCS</b> App</a>
+          <a href="<?= base_url() ?>" class="navbar-brand">
+            <img src="<?= base_url('assets/dist/img/logo.png') ?>" class="new-logo img-responsive" >
+          </a>
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
             <i class="fa fa-bars"></i>
           </button>

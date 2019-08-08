@@ -8,6 +8,9 @@ Home
         float: none;
         margin: 0 auto;
     }
+    .box-body {
+        padding: 30px !important;
+    }
 </style>
 <?php $this->template->endsection() ?>
 
@@ -28,6 +31,7 @@ Home
                             </span>
                         </a>
                         <div class="dropdown-content">
+                            <a href="<?= base_url('laporan_kinerja_bulanan') ?>">Laporan Kinerja Bulanan</a>
                             <a href="<?= base_url('laporan_bulanan') ?>">Laporan Bulanan</a>
                             <a href="<?= base_url('laporan_harian') ?>">Laporan Harian</a>
                         </div>
@@ -77,23 +81,17 @@ Home
                         </a>
                         <div class="dropdown-content">
                             <a href="<?= base_url('harga_tebus_subsidi') ?>">Harga Tebus Subsidi</a>
-                            <a href="<?= base_url('harga_non_subsidi') ?>">Harga Tebus non Subsidi</a>
+                            <a href="<?= base_url('harga_tebus_non_subsidi') ?>">Harga Tebus non Subsidi</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-4">
-                    <div class="dropdown-dashboard">
-                        <a href="listings-half-screen-map-list.html" class="interestContent">
-                            <span>
-                                <i class="fa fa-cubes"></i>
-                                Stok
-                            </span>
-                        </a>
-                        <div class="dropdown-content">
-                            <a href="<?= base_url('stok_subsidi') ?>">Stok Subsidi</a>
-                            <a href="<?= base_url('stok_non_subsidi') ?>">Stok Non Subsidi</a>
-                        </div>
-                    </div>
+                    <a href="<?= base_url('users') ?>" class="interestContent">
+                        <span>
+                            <i class="fa fa-users"></i>
+                            User Management
+                        </span>
+                    </a>
                 </div>
             </div>
         </div>

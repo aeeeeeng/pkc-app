@@ -13,9 +13,11 @@
     <div class="login-box">
         <div class="login-box-body">
             <div class="login-logo">
-                <a href="<?= base_url() ?>"><b>DOCS</b> App</a>
+                <a href="<?= base_url() ?>">
+                    <img src="<?= base_url('assets/dist/img/logo.png') ?>" class="new-logo-login img-responsive" >
+                </a>
             </div>
-            <p class="login-box-msg">Sign in to start your session</p>
+            <p class="login-box-msg">Halaman untuk masuk ke panel admin</p>
 
             <form onsubmit="login()" method="post">
                 <div class="form-group has-feedback">
@@ -32,14 +34,16 @@
                     </div>
                 </div>
             </form>
-            <a href="#" onclick="openRegister()" class="text-center">Daftar sebagai pengguna baru</a>
+            <!-- <a href="#" onclick="openRegister()" class="text-center">Daftar sebagai pengguna baru</a> -->
         </div>
     </div>
 
     <div class="register-box" style="display:none;">
         <div class="register-box-body">
             <div class="register-logo">
-                <a href="<?= base_url() ?>"><b>DOCS</b> App</a>
+                <a href="<?= base_url() ?>">
+                    <img src="<?= base_url('assets/dist/img/logo.png') ?>" class="new-logo-login img-responsive" >
+                </a>
             </div>
             <p class="login-box-msg">Register a new membership</p>
             
