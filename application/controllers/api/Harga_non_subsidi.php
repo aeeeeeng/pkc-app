@@ -27,6 +27,14 @@ class Harga_non_subsidi extends PKCC_Controller {
         try {
             $harga_non_subsidi = $this->datatable->resource($this->harga_non_subsidi_m)
             ->view('file')
+            ->edit_column('hns_product', function($model){
+                switch($model->hns_product) {
+                    case '1': return 'Pupuk';
+                    case '2': return 'Non Pupuk';
+                    case '3': return 'Utilitas';
+                    default: return '';
+                }
+            })
             ->edit_column('created_at', function($model){
                 return $this->general->tgl_ind($model->created_at);
             })

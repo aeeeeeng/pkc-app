@@ -29,7 +29,7 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Harga <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
                 <li><a href="<?= base_url('harga_tebus_subsidi') ?>">Harga Tebus Subsidi</a></li>
-                <li><a href="<?= base_url('harga_non_subsidi') ?>">Harga Tebus non Subsidi</a></li>
+                <li><a href="<?= base_url('harga_tebus_non_subsidi') ?>">Harga Tebus non Subsidi</a></li>
             </ul>
         </li>
         <li class="dropdown">
