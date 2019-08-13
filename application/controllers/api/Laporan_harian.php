@@ -28,6 +28,9 @@ class Laporan_harian extends PKCC_Controller {
             $lap_har = $this->datatable
             ->resource($this->laporan_harian_m)
             ->view('file')
+            ->add_column('lh_month_name', function($model){
+                return $this->general->bln_ind($model->lh_month);
+            })
             ->edit_column('created_at', function($model){
                 return $this->general->tgl_ind($model->created_at);
             })

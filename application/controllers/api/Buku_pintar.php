@@ -28,6 +28,9 @@ class Buku_pintar extends PKCC_Controller {
             $buku_pintar = $this->datatable
             ->resource($this->buku_pintar_m)
             ->view('file')
+            ->add_column('bp_month_name', function($model){
+                return $this->general->bln_ind($model->bp_month);
+            })
             ->edit_column('created_at', function($model){
                 return $this->general->tgl_ind($model->created_at);
             })

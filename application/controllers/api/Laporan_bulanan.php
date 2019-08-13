@@ -29,6 +29,9 @@ class Laporan_bulanan extends PKCC_Controller {
             $lap_bul = $this->datatable
             ->resource($this->laporan_bulanan_m)
             ->view('file')
+            ->add_column('lb_month_name', function($model){
+                return $this->general->bln_ind($model->lb_month);
+            })
             ->edit_column('created_at', function($model){
                 return $this->general->tgl_ind($model->created_at);
             })

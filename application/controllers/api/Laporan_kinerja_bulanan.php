@@ -28,6 +28,9 @@ class Laporan_kinerja_bulanan extends PKCC_Controller {
             $lkb = $this->datatable
             ->resource($this->laporan_kinerja_bulanan_m)
             ->view('file')
+            ->add_column('lkb_month_name', function($model){
+                return $this->general->bln_ind($model->lkb_month);
+            })
             ->edit_column('created_at', function($model){
                 return $this->general->tgl_ind($model->created_at);
             })

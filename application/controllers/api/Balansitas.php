@@ -28,6 +28,9 @@ class Balansitas extends PKCC_Controller {
             $balansitas = $this->datatable
             ->resource($this->balansitas_m)
             ->view('file')
+            ->add_column('balansitas_month_name', function($model){
+                return $this->general->bln_ind($model->balansitas_month);
+            })
             ->edit_column('created_at', function($model){
                 return $this->general->tgl_ind($model->created_at);
             })
