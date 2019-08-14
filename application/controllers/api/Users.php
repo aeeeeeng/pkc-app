@@ -197,4 +197,12 @@ class Users extends PKCC_Controller {
         ->set_status_header($this->status)->set_output(json_encode($this->result));   
     }
 
+    public function logout()
+    {
+        $this->is_POST();
+        $this->auth->user();
+        $this->output->set_content_type('application/json')
+        ->set_status_header(200)->set_output(json_encode(['success' => TRUE, 'message' => 'logout']));   
+    }
+
 }
