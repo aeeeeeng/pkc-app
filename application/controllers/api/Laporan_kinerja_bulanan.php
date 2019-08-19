@@ -47,7 +47,10 @@ class Laporan_kinerja_bulanan extends PKCC_Controller {
             })
             ->custom_sort(function($model){
                 if($sort_by = $this->input->get('sort_by') && $sort_type = $this->input->get('sort_type')) {
-                    $model->order_by($sort_by, $sort_type);
+                    $data_sort = explode(",", $this->input->get('sort_by'));
+                    foreach($data_sort as $data) {
+                        $model->order_by($data, $sort_type);
+                    }
                 }
             })
             ->generate(TRUE);

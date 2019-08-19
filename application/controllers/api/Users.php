@@ -31,6 +31,14 @@ class Users extends PKCC_Controller {
             ->edit_column('updated_at', function($model){
                 return $this->general->tgl_ind($model->updated_at);
             })
+            ->custom_sort(function($model){
+                if($sort_by = $this->input->get('sort_by') && $sort_type = $this->input->get('sort_type')) {
+                    $data_sort = explode(",", $this->input->get('sort_by'));
+                    foreach($data_sort as $data) {
+                        $model->order_by($data, $sort_type);
+                    }
+                }
+            })
             ->generate(true);
             $this->status = 200;
             $user['success'] = TRUE;

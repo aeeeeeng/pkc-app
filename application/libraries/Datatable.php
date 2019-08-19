@@ -149,6 +149,11 @@ class Datatable {
         return $this;
     }
 
+    public function default_sort($sort) {
+        $sort($this);
+        return $this;
+    }
+
     public function having($key, $value = NULL, $escape = NULL) {
         $this->having[] = array(
             'type' => 'having',
