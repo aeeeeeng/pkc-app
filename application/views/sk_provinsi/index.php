@@ -94,6 +94,7 @@ Sk Provinsi
                     [10, 20, 50, -1],
                     ['10 baris', '20 baris', '50 baris', 'Lihat Semua']
                 ],
+                "order": [[ 1, "desc" ]],
                 ajax: {
                     'url': '<?= base_url('api/sk_provinsi') ?>',
                     'type': 'GET',

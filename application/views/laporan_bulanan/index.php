@@ -96,6 +96,7 @@ Laporan Bulanan
                 [12, 24, 36, -1],
                 ['12 baris', '24 baris', '36 baris', 'Lihat Semua']
             ],
+            "order": [[ 1, "desc" ], [ 2, "desc" ]],
             ajax: {
                 'url': '<?= base_url('api/laporan_bulanan') ?>',
                 'type': 'GET',

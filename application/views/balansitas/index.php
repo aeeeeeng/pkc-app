@@ -95,6 +95,7 @@ Balansitas
                     [10, 20, 50, -1],
                     ['10 baris', '20 baris', '50 baris', 'Lihat Semua']
                 ],
+                "order": [[ 1, "desc" ], [ 2, "desc" ], [ 3, "desc" ]],
                 ajax: {
                     'url': '<?= base_url('api/balansitas') ?>',
                     'type': 'GET',
