@@ -70,12 +70,24 @@ class Laporan_bulanan extends PKCC_Controller {
     public function download()
     {
         $this->is_GET();
-        
-        $path = $this->input->get('path');
-        $real_path = base64_decode($path);
-        // echo $real_path;
         $this->load->helper('download');
-        force_download($real_path, NULL);
+        $path = $this->input->get('path');
+        $name = $this->input->get('name');
+        $real_path = base64_decode($path);
+        $real_name = base64_decode($name);
+        $files = $this->files_m->where('file_name', $real_name)->first();
+        $download_sftp_file = $this->general->download_sftp($files->file_path, $real_path);
+        $new_real_path = str_replace("./", "", $real_path);
+        $path_delete = FCPATH.$new_real_path;
+        if($download_sftp_file) {
+            $file_content = file_get_contents($path_delete);
+            if(file_exists($path_delete)){
+                unlink($path_delete);
+            }
+            force_download($real_name, $file_content);
+        } else {
+            show_404();
+        }
     }
 
     public function store()
@@ -96,11 +108,15 @@ class Laporan_bulanan extends PKCC_Controller {
                 $lb_month = $this->input->post('lb_month');
                 $upload = $this->files->upload_file(date("Y/m/d/H/i/s").'-laporan_bulanan-'.$lb_month.'-'.$lb_year, './upload/documents/laporan_bulanan');
                 if ($upload['success']) {
+
                     $message = $upload['message'];
+                    $target_add = 'laporan_bulanan/'.$message['file_name'];
+                    $sftp_file = $this->general->move_sftp($message, $target_add);
+                    
                     $file = [
                         'file_name' => $message['file_name'],
-                        'file_path' => $message['full_path'],
-                        'file_download_path' => base_url('api/laporan_bulanan/download?path='.base64_encode('./upload/documents/laporan_bulanan/'.$message['file_name'])),
+                        'file_path' => $sftp_file,
+                        'file_download_path' => base_url('api/laporan_bulanan/download?path='.base64_encode('./upload/documents/laporan_bulanan/'.$message['file_name']).'&name='.base64_encode($message['file_name'])),
                         'file_ext' => $message['file_ext']
                     ];
                     $this->transaction->start();
