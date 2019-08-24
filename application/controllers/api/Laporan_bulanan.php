@@ -194,13 +194,15 @@ class Laporan_bulanan extends PKCC_Controller {
                 $old_lapbul = $this->laporan_bulanan_m->find($id);
                 $old_file = $this->files_m->find($old_lapbul->file_id);
                 $this->load->helper("file");
-                unlink($old_file->file_path);
+                $this->general->delete_sftp($old_file->file_path);
                 $upload = $this->files->upload_file(date("Y/m/d/H/i/s").'-laporan_bulanan-'.$lb_month.'-'.$lb_year, './upload/documents/laporan_bulanan');
                 $message = $upload['message'];
+                $target_add = 'laporan_bulanan/'.$message['file_name'];
+                $sftp_file = $this->general->move_sftp($message, $target_add);
                 $new_file = [
                     'file_name' => $message['file_name'],
-                    'file_path' => $message['full_path'],
-                    'file_download_path' => base_url('api/laporan_bulanan/download?path='.base64_encode('./upload/documents/laporan_bulanan/'.$message['file_name'])),
+                    'file_path' => $sftp_file,
+                    'file_download_path' => base_url('api/laporan_bulanan/download?path='.base64_encode('./upload/documents/laporan_bulanan/'.$message['file_name']).'&name='.base64_encode($message['file_name'])),
                     'file_ext' => $message['file_ext']
                 ];
                 $this->files_m->update($old_file->id, $new_file);
@@ -229,6 +231,10 @@ class Laporan_bulanan extends PKCC_Controller {
         $this->is_DELETE();
         $this->auth->user();
         try {
+            $lb = $this->laporan_bulanan_m->find($id);
+            $file = $this->files_m->find($lb->file_id);
+            $this->general->delete_sftp($file->file_path);
+            $this->files_m->delete($file->id);
             $this->laporan_bulanan_m->delete($id);
             $this->status = 200;
             $this->result = ['success' => TRUE, 'message' => 'berhasil di hapus'];

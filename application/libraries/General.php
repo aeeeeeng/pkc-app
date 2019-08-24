@@ -29,6 +29,20 @@ class General {
         }
     }
 
+    public function delete_sftp($file) {
+        try {
+            $this->CI->load->library('sftp');
+            $sftp = new Net_SFTP($this->sftp_host);
+            if (!$sftp->login($this->sftp_username, $this->sftp_password)) {
+                exit('Login Failed');
+            }
+            $sftp->delete($file);
+            return TRUE;
+        } catch (Exception $e) {
+            return FALSE;
+        }
+    }
+
     public function move_sftp($file, $target_add) {
         try {
             $this->CI->load->library('sftp');
@@ -40,6 +54,7 @@ class General {
             $from = $file['full_path'];
             $target = $this->sftp_target.$target_add;
             $sftp->put($target, $from, NET_SFTP_LOCAL_FILE);
+            unlink($from);
             return $target;
         } catch(Exception $e) {
             return FALSE;
