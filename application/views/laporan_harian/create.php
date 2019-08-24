@@ -36,7 +36,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="pull-right">
-                <button type="submit" class="btn bg-black btn-flat">Simpan</button>
+                <button type="submit" id="submit" class="btn bg-black btn-flat">Simpan</button>
             </div>
         </div>
     </div>

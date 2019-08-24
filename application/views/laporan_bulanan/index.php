@@ -25,7 +25,7 @@ Laporan Bulanan
                     <div class="form-group">
                         <label>Tipe filter waktu</label>
                         <select onchange="change_date()" class="form-control" id="date_type">
-                            <option value="2" >Hanya Bulan dan Tahun</option>
+                            <option value="2">Hanya Bulan dan Tahun</option>
                             <option value="3" selected>Hanya Tahun</option>
                         </select>
                     </div>
@@ -78,7 +78,7 @@ Laporan Bulanan
     let year, month, day;
     let table_laporan_bulanan;
     const JWT = localStorage.getItem("JWT");
-    $(document).ready(function(){
+    $(document).ready(function() {
         setDefault();
     })
 
@@ -86,7 +86,7 @@ Laporan Bulanan
         autoclose: true,
         format: "dd/mm/yyyy",
     })
-    
+
     function table_laporan_bulanan_f() {
         table_laporan_bulanan = $("#table_laporan_bulanan").DataTable({
             processing: true,
@@ -96,7 +96,10 @@ Laporan Bulanan
                 [12, 24, 36, -1],
                 ['12 baris', '24 baris', '36 baris', 'Lihat Semua']
             ],
-            "order": [[ 1, "desc" ], [ 2, "desc" ]],
+            "order": [
+                [1, "desc"],
+                [2, "desc"]
+            ],
             ajax: {
                 'url': '<?= base_url('api/laporan_bulanan') ?>',
                 'type': 'GET',
@@ -108,12 +111,12 @@ Laporan Bulanan
                     d.month = month
                 },
                 error: function(error) {
-                    if(error.status === 401) {
+                    if (error.status === 401) {
                         refreshAuth()
                     } else if (error.status === 500) {
                         toastr.error(respJson.message)
                     }
-                    
+
                 }
             },
             columns: [{
@@ -136,10 +139,22 @@ Laporan Bulanan
                         return getMonthName(d);
                     }
                 },
-                { data: 'created_by', name: 'created_by'},
-                { data: 'updated_by', name: 'updated_by'},
-                { data: 'created_at', name: 'created_at'},
-                { data: 'updated_at', name: 'updated_at'},
+                {
+                    data: 'created_by',
+                    name: 'created_by'
+                },
+                {
+                    data: 'updated_by',
+                    name: 'updated_by'
+                },
+                {
+                    data: 'created_at',
+                    name: 'created_at'
+                },
+                {
+                    data: 'updated_at',
+                    name: 'updated_at'
+                },
                 {
                     data: 'laporan_bulanan.id',
                     name: 'laporan_bulanan.id',
@@ -153,7 +168,7 @@ Laporan Bulanan
                     render: (d, t, f) => {
                         const edit = `<button onclick="edit(${d})" class="btn btn-primary btn-flat btn-sm"><i class="fa fa-wrench"></i></button>`;
                         const remove = `<button onclick="remove(${d})" class="btn btn-danger btn-flat btn-sm"><i class="fa fa-trash"></i></button>`;
-                        return edit+' '+remove;
+                        return edit + ' ' + remove;
                     }
                 }
             ]
@@ -170,19 +185,35 @@ Laporan Bulanan
     function change_date() {
         const val = $("#date_type").val();
         datePickerInput.datepicker('destroy');
-        year = undefined; month = undefined; day = undefined;
+        year = undefined;
+        month = undefined;
+        day = undefined;
         $("#date_filter").val('');
         let newOptions = {}
         switch (val) {
             case '3':
-                newOptions = {autoclose: true, format: "yyyy", viewMode: "years", minViewMode: "years" }
-            break;
+                newOptions = {
+                    autoclose: true,
+                    format: "yyyy",
+                    viewMode: "years",
+                    minViewMode: "years"
+                }
+                break;
             case '2':
-                newOptions = {autoclose: true, format: "mm/yyyy", viewMode: "months", minViewMode: "months" }
-            break;
+                newOptions = {
+                    autoclose: true,
+                    format: "mm/yyyy",
+                    viewMode: "months",
+                    minViewMode: "months"
+                }
+                break;
             case '1':
-                newOptions = {autoclose: true, format: "dd/mm/yyyy", viewMode: "days" }
-            break;
+                newOptions = {
+                    autoclose: true,
+                    format: "dd/mm/yyyy",
+                    viewMode: "days"
+                }
+                break;
         }
         datePickerInput.datepicker(newOptions)
     }
@@ -193,18 +224,18 @@ Laporan Bulanan
 
     function parsing() {
         const val = $("#date_filter").val();
-        if(val !== '') {
+        if (val !== '') {
             const date = val.split('/');
             const length = date.length;
-            
+
             console.log(length)
-            if(length == 1) {
+            if (length == 1) {
                 year = date[0];
-            } 
+            }
             if (length == 2) {
                 year = date[1];
                 month = date[0];
-            } 
+            }
             if (length == 3) {
                 year = date[2];
                 month = date[1];
@@ -242,12 +273,14 @@ Laporan Bulanan
                     className: 'btn-default'
                 }
             },
-            callback: function (result) {
-                if(result) {
+            callback: function(result) {
+                if (result) {
                     $.ajax({
-                        url: '<?= base_url('api/laporan_bulanan/destroy') ?>/'+id,
+                        url: '<?= base_url('api/laporan_bulanan/destroy') ?>/' + id,
                         type: 'DELETE',
-                        headers: { 'JWT': JWT }
+                        headers: {
+                            'JWT': JWT
+                        }
                     }).done(response => {
                         toastr.success('Berhasil di hapus')
                         bootbox.hideAll()
@@ -259,7 +292,7 @@ Laporan Bulanan
                             formGroup.addClass('has-error')
                             formGroup.append(`<span class="help-block">${respJson.message[key]}</span>`)
                         });
-                        if(error.status === 401) {
+                        if (error.status === 401) {
                             refreshAuth()
                         } else if (error.status === 500) {
                             toastr.error(respJson.message)
@@ -268,12 +301,12 @@ Laporan Bulanan
                 }
             }
         });
-        
+
     }
 
     function edit(id) {
         $.ajax({
-            url: '<?= base_url('laporan_bulanan/edit') ?>/'+id,
+            url: '<?= base_url('laporan_bulanan/edit') ?>/' + id,
             success: function(response) {
                 bootbox.dialog({
                     title: 'Edit Laporan Bulanan',
@@ -284,19 +317,24 @@ Laporan Bulanan
     }
 
     function update(id) {
-        event.preventDefault();    
+        event.preventDefault();
         $("div.form-group").removeClass('has-error');
         $("div.form-group span.help-block").remove();
         var formData = new FormData($("#form_create_lapbul")[0]);
         $.ajax({
-            url: '<?= base_url('api/laporan_bulanan/update') ?>/'+id,
+            url: '<?= base_url('api/laporan_bulanan/update') ?>/' + id,
             type: 'POST',
             data: formData,
             enctype: 'multipart/form-data',
             cache: false,
             contentType: false,
             processData: false,
-            headers: { 'JWT': JWT }
+            headers: {
+                'JWT': JWT
+            },
+            beforeSend: function() {
+                $("#submit").prop("disabled", true).html('<i class="fa fa-spin fa-refresh"></i> &nbsp; Menyimpan')
+            }
         }).done((response) => {
             toastr.success('Berhasil di ubah')
             bootbox.hideAll()
@@ -308,16 +346,18 @@ Laporan Bulanan
                 formGroup.addClass('has-error')
                 formGroup.append(`<span class="help-block">${respJson.message[key]}</span>`)
             });
-            if(error.status === 401) {
+            if (error.status === 401) {
                 refreshAuth()
             } else if (error.status === 500) {
                 toastr.error(respJson.message)
             }
+        }).always(() => {
+            $("#submit").prop("disabled", false).html('Simpan')
         })
     }
 
     function store() {
-        event.preventDefault();    
+        event.preventDefault();
         $("div.form-group").removeClass('has-error');
         $("div.form-group span.help-block").remove();
         var formData = new FormData($("#form_create_lapbul")[0]);
@@ -329,7 +369,12 @@ Laporan Bulanan
             cache: false,
             contentType: false,
             processData: false,
-            headers: { 'JWT': JWT }
+            headers: {
+                'JWT': JWT
+            },
+            beforeSend: function() {
+                $("#submit").prop("disabled", true).html('<i class="fa fa-spin fa-refresh"></i> &nbsp; Menyimpan')
+            }
         }).done((response) => {
             toastr.success('Berhasil di simpan')
             bootbox.hideAll()
@@ -341,15 +386,15 @@ Laporan Bulanan
                 formGroup.addClass('has-error')
                 formGroup.append(`<span class="help-block">${respJson.message[key]}</span>`)
             });
-            if(error.status === 401) {
+            if (error.status === 401) {
                 refreshAuth()
             } else if (error.status === 500) {
                 toastr.error(respJson.message)
             }
-        }) 
+        }).always(() => {
+            $("#submit").prop("disabled", false).html('Simpan')
+        })
     }
-
-    
 </script>
 <?php $this->template->endsection() ?>
 

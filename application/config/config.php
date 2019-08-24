@@ -1,6 +1,20 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+date_default_timezone_set('Asia/Jakarta');
+/*
+
+|--------------------------------------------------------------------------
+| SFTP Account
+|--------------------------------------------------------------------------
+
+*/
+
+$config['sftp_host'] = 'Syahrils-MacBook-Air.local';
+$config['sftp_username'] = 'aeeeeeng';
+$config['sftp_password'] = 'aengganteng';
+$config['sftp_target'] = '/Users/aeeeeeng/pkc-file/';
+
 /*
 |--------------------------------------------------------------------------
 | Base Site URL

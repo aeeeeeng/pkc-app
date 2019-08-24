@@ -5,13 +5,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class General {
 
-    protected $sftp_host = 'Syahrils-MacBook-Air.local';
-    protected $sftp_username = 'aeeeeeng';
-    protected $sftp_password = 'aengganteng';
-    protected $sftp_target = '/Users/aeeeeeng/pkc-file/';
+    protected $sftp_host = '';
+    protected $sftp_username = '';
+    protected $sftp_password = '';
+    protected $sftp_target = '';
 
     public function __construct() {
         $this->CI = get_instance();
+        $this->sftp_host = $this->CI->config->item('sftp_host');
+        $this->sftp_username = $this->CI->config->item('sftp_username');
+        $this->sftp_password = $this->CI->config->item('sftp_password');
+        $this->sftp_target = $this->CI->config->item('sftp_target');
     }
 
     public function download_sftp($file, $target_add) {

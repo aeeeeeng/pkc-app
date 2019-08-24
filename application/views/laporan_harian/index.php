@@ -291,7 +291,10 @@ Laporan Harian
                 cache: false,
                 contentType: false,
                 processData: false,
-                headers: { 'JWT': JWT }
+                headers: { 'JWT': JWT },
+                beforeSend: function() {
+                    $("#submit").prop("disabled", true).html('<i class="fa fa-spin fa-refresh"></i> &nbsp; Menyimpan')
+                }
             }).done((response) => {
                 toastr.success('Berhasil di ubah')
                 bootbox.hideAll()
@@ -308,6 +311,8 @@ Laporan Harian
                 } else if (error.status === 500) {
                     toastr.error(respJson.message)
                 }
+            }).always(() => {
+                $("#submit").prop("disabled", false).html('Simpan')
             })
         }
         function store() {
@@ -323,7 +328,10 @@ Laporan Harian
                 cache: false,
                 contentType: false,
                 processData: false,
-                headers: { 'JWT': JWT }
+                headers: { 'JWT': JWT },
+                beforeSend: function() {
+                    $("#submit").prop("disabled", true).html('<i class="fa fa-spin fa-refresh"></i> &nbsp; Menyimpan')
+                }
             }).done((response) => {
                 toastr.success('Berhasil di simpan')
                 bootbox.hideAll()
@@ -340,6 +348,8 @@ Laporan Harian
                 } else if (error.status === 500) {
                     toastr.error(respJson.message)
                 }
+            }).always(() => {
+                $("#submit").prop("disabled", false).html('Simpan')
             })
         }
         

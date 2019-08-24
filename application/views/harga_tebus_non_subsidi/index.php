@@ -229,7 +229,10 @@ Harga Tebus non Subsidi
                 cache: false,
                 contentType: false,
                 processData: false,
-                headers: { 'JWT': JWT }
+                headers: { 'JWT': JWT },
+                beforeSend: function() {
+                    $("#submit").prop("disabled", true).html('<i class="fa fa-spin fa-refresh"></i> &nbsp; Menyimpan')
+                }
             }).done((response) => {
                 toastr.success('Berhasil di simpan')
                 bootbox.hideAll()
@@ -246,6 +249,8 @@ Harga Tebus non Subsidi
                 } else if (error.status === 500) {
                     toastr.error(respJson.message)
                 }
+            }).always(() => {
+                $("#submit").prop("disabled", false).html('Simpan')
             })
         }
         function update(id) {
@@ -261,7 +266,10 @@ Harga Tebus non Subsidi
                 cache: false,
                 contentType: false,
                 processData: false,
-                headers: { 'JWT': JWT }
+                headers: { 'JWT': JWT },
+                beforeSend: function() {
+                    $("#submit").prop("disabled", true).html('<i class="fa fa-spin fa-refresh"></i> &nbsp; Menyimpan')
+                }
             }).done((response) => {
                 toastr.success('Berhasil di ubah')
                 bootbox.hideAll()
@@ -278,6 +286,8 @@ Harga Tebus non Subsidi
                 } else if (error.status === 500) {
                     toastr.error(respJson.message)
                 }
+            }).always(() => {
+                $("#submit").prop("disabled", false).html('Simpan')
             })
         }
         function remove(id) {
