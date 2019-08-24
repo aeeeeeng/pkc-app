@@ -14,7 +14,7 @@ class Files {
         $config['allowed_types']        = 'gif|jpg|jpeg|png|xls|xlsx|pdf|doc|docx';
         $config['file_name']            = $name;
         $config['overwrite']			= true;
-        $config['max_size']             = 100000;
+        $config['max_size']             = 500000;
         $result = [];
         $this->CI->load->library('upload', $config);
         if ($this->CI->upload->do_upload('file')) {

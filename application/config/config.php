@@ -10,10 +10,17 @@ date_default_timezone_set('Asia/Jakarta');
 
 */
 
+// SFTP LOCAL SYAHRIL
 $config['sftp_host'] = 'Syahrils-MacBook-Air.local';
 $config['sftp_username'] = 'aeeeeeng';
 $config['sftp_password'] = 'aengganteng';
 $config['sftp_target'] = '/Users/aeeeeeng/pkc-file/';
+
+// SFTP PKC
+// $config['sftp_host'] = '192.168.1.191';
+// $config['sftp_username'] = 'root';
+// $config['sftp_password'] = 'Kujang123!!';
+// $config['sftp_target'] = '/opt/lampp/htdocs/pkc-app/upload/documents/';
 
 /*
 |--------------------------------------------------------------------------
@@ -37,8 +44,8 @@ $config['sftp_target'] = '/Users/aeeeeeng/pkc-file/';
 | a PHP script and you can easily do that on your own.
 |
 */
-$folder_name = 'pkc_app';
-$config['base_url'] = "http".((isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS'])) ? "s" : "")."://".$_SERVER['HTTP_HOST']."/".$folder_name;
+$folder_name = '/pkc_app';
+$config['base_url'] = "http".((isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS'])) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$folder_name;
 
 /*
 |--------------------------------------------------------------------------
