@@ -65,11 +65,24 @@ class Permendag extends PKCC_Controller {
     public function download()
     {
         $this->is_GET();
-        
-        $path = $this->input->get('path');
-        $real_path = base64_decode($path);
         $this->load->helper('download');
-        force_download($real_path, NULL);
+        $path = $this->input->get('path');
+        $name = $this->input->get('name');
+        $real_path = base64_decode($path);
+        $real_name = base64_decode($name);
+        $files = $this->files_m->where('file_name', $real_name)->first();
+        $download_sftp_file = $this->general->download_sftp($files->file_path, $real_path);
+        $new_real_path = str_replace("./", "", $real_path);
+        $path_delete = FCPATH.$new_real_path;
+        if($download_sftp_file) {
+            $file_content = file_get_contents($path_delete);
+            if(file_exists($path_delete)){
+                unlink($path_delete);
+            }
+            force_download($real_name, $file_content);
+        } else {
+            show_404();
+        }
     }
 
     public function store()
@@ -92,11 +105,15 @@ class Permendag extends PKCC_Controller {
                 $permendag_description = $this->input->post('permendag_description');
                 $upload = $this->files->upload_file(date("Y/m/d/H/i/s").'-permendag-'.$permendag_number.'-'.$permendag_year, './upload/documents/permendag');   
                 if ($upload['success']) {
+
                     $message = $upload['message'];
+                    $target_add = 'permendag/'.$message['file_name'];
+                    $sftp_file = $this->general->move_sftp($message, $target_add);
+
                     $file = [
                         'file_name' => $message['file_name'],
-                        'file_path' => $message['full_path'],
-                        'file_download_path' => base_url('api/permendag/download?path='.base64_encode('./upload/documents/permendag/'.$message['file_name'])),
+                        'file_path' => $sftp_file,
+                        'file_download_path' => base_url('api/permendag/download?path='.base64_encode('./upload/documents/permendag/'.$message['file_name']).'&name='.base64_encode($message['file_name'])),
                         'file_ext' => $message['file_ext']
                     ];
                     $this->transaction->start();
@@ -177,13 +194,15 @@ class Permendag extends PKCC_Controller {
                 $old_permendag = $this->permendag_m->find($id);
                 $old_file = $this->files_m->find($old_permendag->file_id);
                 $this->load->helper("file");
-                unlink($old_file->file_path);
+                $this->general->delete_sftp($old_file->file_path);
                 $upload = $this->files->upload_file(date("Y/m/d/H/i/s").'-permendag-'.$permendag_number.'-'.$permendag_year, './upload/documents/permendag');   
                 $message = $upload['message'];
+                $target_add = 'permendag/'.$message['file_name'];
+                $sftp_file = $this->general->move_sftp($message, $target_add);
                 $new_file = [
                     'file_name' => $message['file_name'],
-                    'file_path' => $message['full_path'],
-                    'file_download_path' => base_url('api/permendag/download?path='.base64_encode('./upload/documents/permendag/'.$message['file_name'])),
+                    'file_path' => $sftp_file,
+                    'file_download_path' => base_url('api/permendag/download?path='.base64_encode('./upload/documents/permendag/'.$message['file_name']).'&name='.base64_encode($message['file_name'])),
                     'file_ext' => $message['file_ext']
                 ];
                 $this->files_m->update($old_file->id, $new_file);
@@ -216,6 +235,10 @@ class Permendag extends PKCC_Controller {
         $this->is_DELETE();
         $this->auth->user();
         try {
+            $p = $this->permendag_m->find($id);
+            $file = $this->files_m->find($p->file_id);
+            $this->general->delete_sftp($file->file_path);
+            $this->files_m->delete($file->id);
             $this->permendag_m->delete($id);
             $this->status = 200;
             $this->result = ['success' => TRUE, 'message' => 'berhasil di hapus'];
