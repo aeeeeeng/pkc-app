@@ -201,7 +201,7 @@ class Laporan_harian extends PKCC_Controller {
                 $old_laphar = $this->laporan_harian_m->find($id);
                 $old_file = $this->files_m->find($old_laphar->file_id);
                 $this->load->helper("file");
-                unlink($old_file->file_path);
+                $this->general->delete_sftp($old_file->file_path);
                 $upload = $this->files->upload_file(date("Y/m/d/H/i/s").'-laporan_harian-'.$lh_day.'-'.$lh_month.'-'.$lh_year, './upload/documents/laporan_harian');
                 $message = $upload['message'];
                 $target_add = 'laporan_harian/'.$message['file_name'];
