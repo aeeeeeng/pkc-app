@@ -76,7 +76,15 @@ class Auth {
         $jwt = null;
         if($token === null) {
             $headers = $this->CI->input->request_headers();
-            $jwt = isset($headers['JWT']) ? $headers['JWT'] : 'ANCOK';
+            if(isset($headers['jwt'])) {
+                $jwt = $headers['jwt'];
+            } elseif (isset($headers['Jwt'])) {
+                $jwt = $headers['Jwt'];
+            } elseif (isset($headers['JWT'])) {
+                $jwt = $headers['JWT'];
+            } else {
+                $jwt = '...';    
+            }
         } else {
             $jwt = $token;
         }

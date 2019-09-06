@@ -184,9 +184,17 @@
                     password
                 }),
             }).done((response, textStatus, jqXHR) => {
-                toastr.success('success', 'redirect to home page');
-                localStorage.setItem("JWT", jqXHR.getResponseHeader("JWT"))
-                window.location.href = "<?= base_url('home') ?>"
+                if(response.success === true) {
+                    toastr.success('success', 'redirect to home page');
+                    localStorage.setItem("JWT", jqXHR.getResponseHeader("JWT"))
+                    window.location.href = "<?= base_url('home') ?>"
+                } else {
+                    Object.keys(response.message).map(function(key, index) {
+                        const formGroup = $("#" + key).closest('div.form-group')
+                        formGroup.addClass('has-error')
+                        formGroup.append(`<span class="help-block">${response.message[key]}</span>`);
+                    });
+                }
             }).fail((xhr, textStatus, errorThrown) => {
                 const respJson = $.parseJSON(xhr.responseText)
                 if (xhr.status === 400) {

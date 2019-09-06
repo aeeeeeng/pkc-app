@@ -125,7 +125,7 @@ class Users extends PKCC_Controller {
                 show_404();
             }
             if(!$login) {
-                $this->status = 401;
+                $this->status = 200;
                 $this->result = ['success' => false, 'message' => ['username' => 'username is wrong', 'password' => 'password is wrong']];
             } else {
                 $this->status = 200;

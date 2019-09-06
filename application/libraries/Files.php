@@ -16,7 +16,8 @@ class Files {
         $config['overwrite']			= true;
         $config['max_size']             = 500000;
         $result = [];
-        $this->CI->load->library('upload', $config);
+        $this->CI->load->library('upload');
+        $this->CI->upload->initialize($config);
         if ($this->CI->upload->do_upload('file')) {
             $data = $this->CI->upload->data();
             $result['success'] = true;
