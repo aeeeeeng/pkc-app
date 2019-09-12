@@ -4,11 +4,28 @@
             <a href="<?= base_url() ?>">Home </a>
         </li>
         <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Laporan Penjualan <span class="caret"></span></a>
-            <ul class="dropdown-menu" role="menu">
-                <li><a href="<?= base_url('laporan_kinerja_bulanan') ?>">Laporan Kinerja Bulanan</a></li>
-                <li><a href="<?= base_url('laporan_bulanan') ?>">Laporan Bulanan</a></li>
-                <li><a href="<?= base_url('laporan_harian') ?>">Laporan Harian</a></li>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Laporan <b class="caret"></b></a>
+            <ul class="dropdown-menu multi-level">
+                <li class="dropdown-submenu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Laporan Bulanan</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="<?= base_url('laporan_bulanan') ?>">Laporan Penjualan</a></li>
+                        <li><a href="<?= base_url('laporan_kinerja_bulanan') ?>">Laporan Kinerja Penjualan</a></li>
+                        <li><a class="empty-page" href="#">Empty</a></li>
+                        <li><a class="empty-page" href="#">Empty</a></li>
+                        <li><a class="empty-page" href="#">Empty</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown-submenu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Laporan Harian</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="<?= base_url('laporan_harian') ?>">Laporan Penjualan Harian</a></li>
+                        <li><a class="empty-page" href="#">Empty</a></li>
+                        <li><a class="empty-page" href="#">Empty</a></li>
+                        <li><a class="empty-page" href="#">Empty</a></li>
+                        <li><a class="empty-page" href="#">Empty</a></li>
+                    </ul>
+                </li>
             </ul>
         </li>
         <li class="">

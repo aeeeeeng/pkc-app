@@ -27,13 +27,30 @@ Home
                         <a href="listings-half-screen-map-list.html" class="interestContent">
                             <span>
                                 <i class="fa fa-cart-plus"></i>
-                                Laporan Penjualan
+                                Laporan
                             </span>
                         </a>
                         <div class="dropdown-content">
-                            <a href="<?= base_url('laporan_kinerja_bulanan') ?>">Laporan Kinerja Bulanan</a>
-                            <a href="<?= base_url('laporan_bulanan') ?>">Laporan Bulanan</a>
-                            <a href="<?= base_url('laporan_harian') ?>">Laporan Harian</a>
+                            <div class="dropdown-dashboard-sub">
+                                <a href="">Laporan Bulanan</a>
+                                <div class="dropdown-content-sub">
+                                    <a href="<?= base_url('laporan_bulanan') ?>">Laporan Penjualan</a>
+                                    <a href="<?= base_url('laporan_kinerja_bulanan') ?>">Laporan Kinerja Penjualan</a>
+                                    <a class="empty-page" href="#">Empty</a>
+                                    <a class="empty-page" href="#">Empty</a>
+                                    <a class="empty-page" href="#">Empty</a>
+                                </div>
+                            </div>
+                            <div class="dropdown-dashboard-sub">
+                                <a href="">Laporan Harian</a>
+                                <div class="dropdown-content-sub">
+                                    <a href="<?= base_url('laporan_harian') ?>">Laporan Penjualan Harian</a>
+                                    <a class="empty-page" href="#">Empty</a>
+                                    <a class="empty-page" href="#">Empty</a>
+                                    <a class="empty-page" href="#">Empty</a>
+                                    <a class="empty-page" href="#">Empty</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

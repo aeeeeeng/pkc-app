@@ -143,6 +143,25 @@ a.interestContent:hover, a.interestContent:hover span, a.interestContent:hover s
     background-color: #222;
 }
 
+.dropdown-dashboard-sub {
+    position: relative;
+}
+
+.dropdown-content-sub {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 260px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    top: 0;
+    left: 100%;
+ }
+
+ .dropdown-dashboard-sub:hover .dropdown-content-sub {
+    display: block;
+  }
+
 .dropdown-dashboard {
     position: relative;
 }
